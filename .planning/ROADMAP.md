@@ -33,6 +33,15 @@ This roadmap delivers Audy.not in 6 phases, following the natural dependency cha
 - Database schema for users table
 - Auth middleware for protected routes
 
+**Plans:** 5 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project scaffold (Next.js 15, Tailwind, shadcn/ui)
+- [ ] 01-02-PLAN.md — Supabase utilities and auth middleware
+- [ ] 01-03-PLAN.md — Database schema (profiles table with trigger)
+- [ ] 01-04-PLAN.md — Auth UI components and server actions
+- [ ] 01-05-PLAN.md — Protected routes and landing page integration
+
 ---
 
 ## Phase 2: Onboarding and Products
@@ -202,7 +211,7 @@ This roadmap delivers Audy.not in 6 phases, following the natural dependency cha
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 1 | Foundation and Authentication | 4 | Pending |
+| 1 | Foundation and Authentication | 4 | Planned |
 | 2 | Onboarding and Products | 10 | Pending |
 | 3 | Monitoring Engine | 8 | Pending |
 | 4 | Telegram Notifications and Actions | 5 | Pending |
@@ -238,4 +247,4 @@ All phases are sequential. Each phase depends on the previous phase completing.
 
 ---
 *Roadmap created: 2026-01-19*
-*Last updated: 2026-01-19*
+*Last updated: 2026-01-20*
