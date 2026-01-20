@@ -19,7 +19,7 @@ The human stays in the loop. AI curates and drafts; the human approves and posts
 - [ ] User can sign up and authenticate via Supabase Auth
 - [ ] User can connect their Telegram account via deep link flow
 - [ ] User can configure their persona (expertise, tone, phrases to avoid)
-- [ ] User can add products with name, description, URL, keywords, and target subreddits
+- [ ] User can add products via URL (Firecrawl + OpenAI auto-generates details) or manually
 - [ ] System polls Reddit for posts matching user's keywords in configured subreddits
 - [ ] System filters posts through AI intent classification (pain points and recommendation requests only)
 - [ ] System generates persona-driven draft replies for qualifying posts
@@ -63,6 +63,7 @@ The human stays in the loop. AI curates and drafts; the human approves and posts
 - Stripe (payments)
 - Telegram Bot API (notifications)
 - OpenAI API (intent filtering + reply generation)
+- Firecrawl (URL scraping for product auto-sync)
 - Vercel (hosting + cron)
 
 ## Constraints
@@ -83,6 +84,8 @@ The human stays in the loop. AI curates and drafts; the human approves and posts
 | Reddit first, HN later | Simpler API, larger community volume, faster validation | — Pending |
 | Usage counted at draft generation, not approval | Fair to user (they don't waste quota on discards), simpler billing logic | — Pending |
 | GPT-4o-mini for both layers | Cost-effective, fast enough for near-realtime, sufficient quality for MVP | — Pending |
+| Firecrawl for URL scraping | Reliable extraction, handles JS-rendered pages, better than DIY scraping | — Pending |
+| URL-first product creation | Reduces friction, auto-generates keywords/subreddits, manual fallback available | — Pending |
 
 ---
-*Last updated: 2026-01-19 after initialization*
+*Last updated: 2026-01-19 after requirements definition*
