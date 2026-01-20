@@ -6,16 +6,16 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 1 - Foundation and Authentication in progress. Database schema created, ready for auth UI.
+**Current Focus:** Phase 1 - Foundation and Authentication in progress. Supabase utilities, middleware, and database schema complete. Ready for auth UI.
 
 ## Current Position
 
 **Phase:** 1 of 6 (Foundation and Authentication)
-**Plan:** 2 of 5 complete
+**Plan:** 3 of 5 complete
 **Status:** In progress
-**Last activity:** 2026-01-20 - Completed 01-03-PLAN.md (Database schema)
+**Last activity:** 2026-01-20 - Completed 01-02-PLAN.md (Supabase utilities and auth middleware)
 
-**Progress:** [####......] 40%
+**Progress:** [######....] 60%
 
 ### Phase 1 Goal
 Users can create accounts and access protected routes.
@@ -32,8 +32,8 @@ Users can create accounts and access protected routes.
 |--------|-------|
 | Phases completed | 0/6 |
 | Requirements done | 0/39 |
-| Plans executed | 2 |
-| Session commits | 4 |
+| Plans executed | 3 |
+| Session commits | 7 |
 
 ## Accumulated Context
 
@@ -43,6 +43,8 @@ Users can create accounts and access protected routes.
 | Next.js 16.1.4 | Latest stable at scaffold time | 1 |
 | Tailwind CSS 4 | create-next-app default, CSS variables | 1 |
 | shadcn New York style | Clean SaaS appearance | 1 |
+| getUser() over getSession() | Validates token with Supabase Auth server, more secure | 1 |
+| Middleware pattern (not proxy) | Still works in Next.js 16, follows Supabase docs | 1 |
 | RLS user isolation | Users can only access their own profile row | 1 |
 | Trigger-based profile creation | Auto-create profile on auth signup | 1 |
 
@@ -64,21 +66,24 @@ Users can create accounts and access protected routes.
 ## Session Continuity
 
 ### What Just Happened
-- Created profiles table SQL migration (supabase/migrations/00001_profiles.sql)
-- Defined RLS policies for user data isolation
-- Created trigger functions for auto-creation and timestamp management
-- Created TypeScript types for profiles table (src/types/database.ts)
+- Created Supabase client utilities (browser, server, middleware)
+- Implemented Next.js middleware for auth token refresh
+- Created Zod validation schemas for login/signup forms
+- Public routes (/, /auth/callback) accessible without auth
+- Protected routes redirect unauthenticated users to home
 
 ### What Happens Next
 - Execute 01-04-PLAN.md: Auth UI components
-- Create login/signup forms
+- Create login/signup forms with validation
 - Implement Google OAuth button
 - Note: SQL migration needs manual execution in Supabase Dashboard before testing
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
 - Tech stack: Next.js 16, TypeScript, Supabase, Tailwind 4, shadcn/ui
-- Database schema ready (needs execution in Supabase)
+- Supabase utilities ready: src/lib/supabase/{client,server,middleware}.ts
+- Auth middleware active: src/middleware.ts
+- Validation schemas ready: src/lib/validations/auth.ts
 - Mode: yolo (minimal confirmations)
 - Depth: standard (5 plans in Phase 1)
 
