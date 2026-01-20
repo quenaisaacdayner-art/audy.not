@@ -130,60 +130,60 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | TBD | Pending |
-| AUTH-02 | TBD | Pending |
-| AUTH-03 | TBD | Pending |
-| AUTH-04 | TBD | Pending |
-| ONBR-01 | TBD | Pending |
-| ONBR-02 | TBD | Pending |
-| ONBR-03 | TBD | Pending |
-| ONBR-04 | TBD | Pending |
-| PROD-01 | TBD | Pending |
-| PROD-02 | TBD | Pending |
-| PROD-03 | TBD | Pending |
-| PROD-04 | TBD | Pending |
-| PROD-05 | TBD | Pending |
-| PROD-06 | TBD | Pending |
-| MNTR-01 | TBD | Pending |
-| MNTR-02 | TBD | Pending |
-| MNTR-03 | TBD | Pending |
-| MNTR-04 | TBD | Pending |
-| MNTR-05 | TBD | Pending |
-| TELE-01 | TBD | Pending |
-| TELE-02 | TBD | Pending |
-| TELE-03 | TBD | Pending |
-| TELE-04 | TBD | Pending |
-| TELE-05 | TBD | Pending |
-| TELE-06 | TBD | Pending |
-| MENT-01 | TBD | Pending |
-| MENT-02 | TBD | Pending |
-| MENT-03 | TBD | Pending |
-| BILL-01 | TBD | Pending |
-| BILL-02 | TBD | Pending |
-| BILL-03 | TBD | Pending |
-| BILL-04 | TBD | Pending |
-| BILL-05 | TBD | Pending |
-| USAG-01 | TBD | Pending |
-| USAG-02 | TBD | Pending |
-| USAG-03 | TBD | Pending |
-| USAG-04 | TBD | Pending |
-| USAG-05 | TBD | Pending |
-| DASH-01 | TBD | Pending |
-| DASH-02 | TBD | Pending |
-| DASH-03 | TBD | Pending |
-| SETT-01 | TBD | Pending |
-| SETT-02 | TBD | Pending |
-| SETT-03 | TBD | Pending |
-| SETT-04 | TBD | Pending |
-| MRKT-01 | TBD | Pending |
-| MRKT-02 | TBD | Pending |
-| MRKT-03 | TBD | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| ONBR-01 | Phase 2 | Pending |
+| ONBR-02 | Phase 2 | Pending |
+| ONBR-03 | Phase 2 | Pending |
+| ONBR-04 | Phase 2 | Pending |
+| PROD-01 | Phase 2 | Pending |
+| PROD-02 | Phase 2 | Pending |
+| PROD-03 | Phase 2 | Pending |
+| PROD-04 | Phase 2 | Pending |
+| PROD-05 | Phase 6 | Pending |
+| PROD-06 | Phase 2 | Pending |
+| MNTR-01 | Phase 3 | Pending |
+| MNTR-02 | Phase 3 | Pending |
+| MNTR-03 | Phase 3 | Pending |
+| MNTR-04 | Phase 3 | Pending |
+| MNTR-05 | Phase 3 | Pending |
+| TELE-01 | Phase 4 | Pending |
+| TELE-02 | Phase 4 | Pending |
+| TELE-03 | Phase 4 | Pending |
+| TELE-04 | Phase 4 | Pending |
+| TELE-05 | Phase 4 | Pending |
+| TELE-06 | Phase 2 | Pending |
+| MENT-01 | Phase 3 | Pending |
+| MENT-02 | Phase 3 | Pending |
+| MENT-03 | Phase 3 | Pending |
+| BILL-01 | Phase 6 | Pending |
+| BILL-02 | Phase 6 | Pending |
+| BILL-03 | Phase 6 | Pending |
+| BILL-04 | Phase 6 | Pending |
+| BILL-05 | Phase 6 | Pending |
+| USAG-01 | Phase 5 | Pending |
+| USAG-02 | Phase 5 | Pending |
+| USAG-03 | Phase 5 | Pending |
+| USAG-04 | Phase 5 | Pending |
+| USAG-05 | Phase 5 | Pending |
+| DASH-01 | Phase 5 | Pending |
+| DASH-02 | Phase 5 | Pending |
+| DASH-03 | Phase 5 | Pending |
+| SETT-01 | Phase 5 | Pending |
+| SETT-02 | Phase 5 | Pending |
+| SETT-03 | Phase 5 | Pending |
+| SETT-04 | Phase 5 | Pending |
+| MRKT-01 | Phase 6 | Pending |
+| MRKT-02 | Phase 6 | Pending |
+| MRKT-03 | Phase 6 | Pending |
 
 **Coverage:**
 - v1 requirements: 39 total
-- Mapped to phases: 0
-- Unmapped: 39 (pending roadmap creation)
+- Mapped to phases: 39
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-19*
-*Last updated: 2026-01-19 after initial definition*
+*Last updated: 2026-01-19 after roadmap creation*
