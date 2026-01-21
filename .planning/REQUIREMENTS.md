@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication
 
-- [ ] **AUTH-01**: User can sign up with email/password
-- [ ] **AUTH-02**: User can sign up with Google OAuth
-- [ ] **AUTH-03**: User session persists across browser refresh
-- [ ] **AUTH-04**: User is redirected to onboarding after first signup
+- [x] **AUTH-01**: User can sign up with email/password
+- [x] **AUTH-02**: User can sign up with Google OAuth
+- [x] **AUTH-03**: User session persists across browser refresh
+- [x] **AUTH-04**: User is redirected to onboarding after first signup
 
 ### Onboarding
 
@@ -130,10 +130,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
 | ONBR-01 | Phase 2 | Pending |
 | ONBR-02 | Phase 2 | Pending |
 | ONBR-03 | Phase 2 | Pending |
@@ -186,4 +186,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-19*
-*Last updated: 2026-01-19 after roadmap creation*
+*Last updated: 2026-01-21 after Phase 1 completion*
