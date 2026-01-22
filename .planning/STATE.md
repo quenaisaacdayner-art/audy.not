@@ -1,30 +1,35 @@
 # State: Audy.not
 
-**Session:** 2026-01-21
+**Session:** 2026-01-22
 
 ## Project Reference
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 1 complete. Ready to begin Phase 2 - Onboarding and Products.
+**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 01 (Database Setup) complete.
 
 ## Current Position
 
-**Phase:** 1 of 6 (Foundation and Authentication) — COMPLETE
-**Plan:** 5 of 5 complete
-**Status:** Complete
-**Last activity:** 2026-01-21 - Phase 1 verified and complete
+**Phase:** 2 of 6 (Onboarding and Products)
+**Plan:** 1 of 9 complete
+**Status:** In progress
+**Last activity:** 2026-01-22 - Completed 02-01-PLAN.md
 
-**Progress:** [##########] 100%
+**Progress:** [###-------] 33%
 
-### Phase 1 Goal
-Users can create accounts and access protected routes. ✓
+### Phase 2 Goal
+Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted product generation.
 
-### Phase 1 Success Criteria
-1. [x] User can create account with email/password and see onboarding
-2. [x] User can create account with Google OAuth and see onboarding
-3. [x] User can close browser, reopen, and remain logged in
-4. [x] New user lands on onboarding; returning user lands on dashboard
+### Phase 2 Progress
+1. [x] 02-01: Database Setup and Dependencies
+2. [ ] 02-02: Persona Step UI
+3. [ ] 02-03: Telegram Connection Step
+4. [ ] 02-04: Product Step with URL Scraping
+5. [ ] 02-05: AI Product Generation
+6. [ ] 02-06: Onboarding Flow Integration
+7. [ ] 02-07: Dashboard Redirect
+8. [ ] 02-08: Settings Page
+9. [ ] 02-09: Testing and Polish
 
 ## Performance Metrics
 
@@ -32,8 +37,8 @@ Users can create accounts and access protected routes. ✓
 |--------|-------|
 | Phases completed | 1/6 |
 | Requirements done | 4/39 |
-| Plans executed | 5 |
-| Session commits | 14 |
+| Plans executed | 6 |
+| Session commits | 17 |
 
 ## Accumulated Context
 
@@ -51,6 +56,10 @@ Users can create accounts and access protected routes. ✓
 | Generic auth error messages | Security - don't reveal if email exists | 1 |
 | Simple layout auth check | Layout only checks auth, onboarding check in pages | 1 |
 | Suspense for search params | Required by Next.js for client components | 1 |
+| grammy for Telegram | TypeScript-native, modern middleware, excellent docs | 2 |
+| Firecrawl for scraping | Official SDK, handles anti-bot, JS rendering | 2 |
+| openai with zodResponseFormat | Type-safe structured outputs | 2 |
+| One persona per user | UNIQUE(user_id) constraint on personas table | 2 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -62,6 +71,7 @@ Users can create accounts and access protected routes. ✓
 |------|---------|-------|
 | Execute SQL migration | Run 00001_profiles.sql in Supabase Dashboard | 1 |
 | Configure Google OAuth | Add callback URL in Google Cloud Console | 1 |
+| Execute Phase 2 migration | Run 00002_phase2_tables.sql in Supabase Dashboard | 2 |
 
 ### Blockers
 | Blocker | Status | Resolution |
@@ -71,24 +81,23 @@ Users can create accounts and access protected routes. ✓
 ## Session Continuity
 
 ### What Just Happened
-- Completed Phase 1: Foundation and Authentication
-- All 5 plans executed (01-01 through 01-05)
-- Human verification approved for auth flows
-- Verifier confirmed 4/4 must-haves
-- AUTH-01 through AUTH-04 requirements marked Complete
+- Completed 02-01: Database Setup and Dependencies
+- Created Phase 2 database schema (personas, telegram_connections, telegram_connection_tokens, products)
+- Added TypeScript types for all new tables
+- Installed npm packages: grammy, @mendable/firecrawl-js, openai, qrcode.react
 
 ### What Happens Next
-- Begin Phase 2: Onboarding and Products
-- Run `/gsd:discuss-phase 2` to gather context
-- Or `/gsd:plan-phase 2` to plan directly
+- Execute 02-02: Persona Step UI
+- Build the first onboarding step with expertise, tone, phrases, target audience fields
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
 - Tech stack: Next.js 16, TypeScript, Supabase, Tailwind 4, shadcn/ui
-- Auth flow complete: signup, login, OAuth, protected routes
+- Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
+- Auth flow complete from Phase 1
 - Mode: yolo (minimal confirmations)
 - Depth: standard
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-21*
+*Last updated: 2026-01-22*
