@@ -57,6 +57,7 @@ export interface Database {
           updated_at?: string
         }
         Update: Partial<Omit<Profile, 'id' | 'created_at'>>
+        Relationships: []
       }
       personas: {
         Row: Persona
@@ -66,6 +67,7 @@ export interface Database {
           updated_at?: string
         }
         Update: Partial<Omit<Persona, 'id' | 'user_id' | 'created_at'>>
+        Relationships: []
       }
       telegram_connections: {
         Row: TelegramConnection
@@ -74,11 +76,13 @@ export interface Database {
           connected_at?: string
         }
         Update: Partial<Omit<TelegramConnection, 'id' | 'user_id'>>
+        Relationships: []
       }
       telegram_connection_tokens: {
         Row: TelegramConnectionToken
         Insert: TelegramConnectionToken
         Update: never // Tokens should not be updated, only created/deleted
+        Relationships: []
       }
       products: {
         Row: Product
@@ -88,7 +92,12 @@ export interface Database {
           updated_at?: string
         }
         Update: Partial<Omit<Product, 'id' | 'user_id' | 'created_at'>>
+        Relationships: []
       }
     }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }
