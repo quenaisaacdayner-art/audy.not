@@ -6,16 +6,16 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 02 (Telegram Bot Setup) complete.
+**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 03 (AI Clients Setup) complete.
 
 ## Current Position
 
 **Phase:** 2 of 6 (Onboarding and Products)
-**Plan:** 2 of 9 complete
+**Plan:** 3 of 9 complete
 **Status:** In progress
-**Last activity:** 2026-01-22 - Completed 02-02-PLAN.md
+**Last activity:** 2026-01-22 - Completed 02-03-PLAN.md
 
-**Progress:** [####------] 36%
+**Progress:** [####------] 40%
 
 ### Phase 2 Goal
 Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted product generation.
@@ -23,13 +23,13 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ### Phase 2 Progress
 1. [x] 02-01: Database Setup and Dependencies
 2. [x] 02-02: Telegram Bot Setup
-3. [ ] 02-03: Telegram Connection Step
-4. [ ] 02-04: Product Step with URL Scraping
-5. [ ] 02-05: AI Product Generation
-6. [ ] 02-06: Onboarding Flow Integration
-7. [ ] 02-07: Dashboard Redirect
-8. [ ] 02-08: Settings Page
-9. [ ] 02-09: Testing and Polish
+3. [x] 02-03: AI Clients Setup (Firecrawl + OpenAI)
+4. [ ] 02-04: Persona Step UI
+5. [ ] 02-05: Telegram Connection Step
+6. [ ] 02-06: Product Step with URL Scraping
+7. [ ] 02-07: Onboarding Flow Integration
+8. [ ] 02-08: Dashboard Redirect
+9. [ ] 02-09: Settings Page
 
 ## Performance Metrics
 
@@ -37,8 +37,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 |--------|-------|
 | Phases completed | 1/6 |
 | Requirements done | 4/39 |
-| Plans executed | 7 |
-| Session commits | 20 |
+| Plans executed | 8 |
+| Session commits | 23 |
 
 ## Accumulated Context
 
@@ -61,6 +61,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | openai with zodResponseFormat | Type-safe structured outputs | 2 |
 | One persona per user | UNIQUE(user_id) constraint on personas table | 2 |
 | Nullable bot pattern | Allows dev without Telegram config, returns 503 | 2 |
+| gpt-4o-mini for products | Cost efficient for product analysis | 2 |
+| Result pattern for APIs | {success, data, error} structure for all external APIs | 2 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -75,6 +77,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Execute Phase 2 migration | Run 00002_phase2_tables.sql in Supabase Dashboard | 2 |
 | Create Telegram bot | Via @BotFather, get token and username | 2 |
 | Register webhook | curl API to setWebhook after deployment | 2 |
+| Get Firecrawl API key | Sign up at firecrawl.dev | 2 |
+| Get OpenAI API key | Create at platform.openai.com | 2 |
 
 ### Blockers
 | Blocker | Status | Resolution |
@@ -84,20 +88,21 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Completed 02-02: Telegram Bot Setup
-- Created grammY bot instance with /start deep link handler
-- Created webhook route at /api/telegram/webhook
-- Added generateDeepLink helper function
-- Made bot nullable for development without credentials
+- Completed 02-03: AI Clients Setup
+- Created Firecrawl client for URL scraping (src/lib/firecrawl/client.ts)
+- Created OpenAI client for product generation (src/lib/openai/client.ts)
+- Created product validation schemas (src/lib/validations/product.ts)
+- Both clients gracefully handle missing API keys
 
 ### What Happens Next
-- Execute 02-03: Telegram Connection Step
-- Build the UI component for connecting Telegram during onboarding
+- Execute 02-04: Persona Step UI
+- Build persona configuration form with expertise, tone, phrases, target audience
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
 - Tech stack: Next.js 16, TypeScript, Supabase, Tailwind 4, shadcn/ui
 - Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
+- AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
 - Auth flow complete from Phase 1
 - Mode: yolo (minimal confirmations)
