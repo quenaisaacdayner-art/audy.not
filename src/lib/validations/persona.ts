@@ -21,9 +21,7 @@ export const personaFormSchema = z.object({
     .max(100, 'Custom tone is too long')
     .optional(),
   phrasesToAvoid: z.string()
-    .max(500, 'Phrases list is too long')
-    .optional()
-    .default(''),
+    .max(500, 'Phrases list is too long'),
   targetAudience: z.string()
     .min(5, 'Please describe your target audience (at least 5 characters)')
     .max(500, 'Target audience description is too long'),
