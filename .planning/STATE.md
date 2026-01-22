@@ -6,16 +6,16 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 03 (AI Clients Setup) complete.
+**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 05 (Telegram Connection Step) complete.
 
 ## Current Position
 
 **Phase:** 2 of 6 (Onboarding and Products)
-**Plan:** 3 of 9 complete
+**Plan:** 5 of 9 complete
 **Status:** In progress
-**Last activity:** 2026-01-22 - Completed 02-03-PLAN.md
+**Last activity:** 2026-01-22 - Completed 02-05-PLAN.md
 
-**Progress:** [####------] 40%
+**Progress:** [#####-----] 50%
 
 ### Phase 2 Goal
 Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted product generation.
@@ -24,8 +24,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 1. [x] 02-01: Database Setup and Dependencies
 2. [x] 02-02: Telegram Bot Setup
 3. [x] 02-03: AI Clients Setup (Firecrawl + OpenAI)
-4. [ ] 02-04: Persona Step UI
-5. [ ] 02-05: Telegram Connection Step
+4. [x] 02-04: Persona Step UI
+5. [x] 02-05: Telegram Connection Step
 6. [ ] 02-06: Product Step with URL Scraping
 7. [ ] 02-07: Onboarding Flow Integration
 8. [ ] 02-08: Dashboard Redirect
@@ -36,9 +36,9 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Metric | Value |
 |--------|-------|
 | Phases completed | 1/6 |
-| Requirements done | 4/39 |
-| Plans executed | 8 |
-| Session commits | 23 |
+| Requirements done | 5/39 |
+| Plans executed | 10 |
+| Session commits | 25 |
 
 ## Accumulated Context
 
@@ -63,6 +63,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Nullable bot pattern | Allows dev without Telegram config, returns 503 | 2 |
 | gpt-4o-mini for products | Cost efficient for product analysis | 2 |
 | Result pattern for APIs | {success, data, error} structure for all external APIs | 2 |
+| Manual connection check | No websocket/polling for Telegram, user clicks button | 2 |
+| 30-minute token expiry | Balance security and convenience for Telegram connection | 2 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -88,15 +90,14 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Completed 02-03: AI Clients Setup
-- Created Firecrawl client for URL scraping (src/lib/firecrawl/client.ts)
-- Created OpenAI client for product generation (src/lib/openai/client.ts)
-- Created product validation schemas (src/lib/validations/product.ts)
-- Both clients gracefully handle missing API keys
+- Completed 02-05: Telegram Connection Step
+- Created Telegram server actions (src/actions/telegram.ts)
+- Created TelegramStep UI component with QR code and deep link
+- Added shadcn card component
 
 ### What Happens Next
-- Execute 02-04: Persona Step UI
-- Build persona configuration form with expertise, tone, phrases, target audience
+- Execute 02-06: Product Step with URL Scraping
+- Build product form with URL input and AI-assisted generation
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
@@ -104,6 +105,7 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 - Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
+- Telegram step: src/components/onboarding/telegram-step.tsx
 - Auth flow complete from Phase 1
 - Mode: yolo (minimal confirmations)
 - Depth: standard
