@@ -171,7 +171,7 @@ export function PersonaStep({ onComplete, initialData }: PersonaStepProps) {
         )}
 
         <Button type="submit" disabled={loading} className="w-full">
-          {loading ? 'Saving...' : 'Continue'}
+          {loading ? 'Saving...' : 'Complete Setup'}
         </Button>
       </form>
     </Form>

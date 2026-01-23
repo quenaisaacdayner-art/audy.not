@@ -153,11 +153,17 @@ export function ProductStep({ onComplete }: ProductStepProps) {
                 <FormItem>
                   <FormLabel>Product Name</FormLabel>
                   <FormControl>
-                    {generating ? (
-                      <Skeleton className="h-10 w-full" />
-                    ) : (
-                      <Input placeholder="e.g., Acme Analytics" {...field} />
-                    )}
+                    <div className="relative">
+                      <Input
+                        placeholder="e.g., Acme Analytics"
+                        {...field}
+                        disabled={generating}
+                        className={generating ? 'opacity-0' : ''}
+                      />
+                      {generating && (
+                        <Skeleton className="h-10 w-full absolute inset-0" />
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -172,15 +178,17 @@ export function ProductStep({ onComplete }: ProductStepProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    {generating ? (
-                      <Skeleton className="h-20 w-full" />
-                    ) : (
+                    <div className="relative">
                       <Textarea
                         placeholder="Brief description of what your product does..."
-                        className="resize-none"
+                        className={`resize-none ${generating ? 'opacity-0' : ''}`}
                         {...field}
+                        disabled={generating}
                       />
-                    )}
+                      {generating && (
+                        <Skeleton className="h-20 w-full absolute inset-0" />
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -190,39 +198,40 @@ export function ProductStep({ onComplete }: ProductStepProps) {
             {/* Keywords */}
             <div className="space-y-2">
               <FormLabel>Keywords</FormLabel>
-              {generating ? (
-                <Skeleton className="h-10 w-full" />
-              ) : (
-                <>
-                  <Input
-                    placeholder="analytics, metrics, dashboard, reporting (comma-separated)"
-                    value={keywordsInput}
-                    onChange={(e) => {
-                      setKeywordsInput(e.target.value)
-                      form.setValue('keywords', parseCommaSeparated(e.target.value))
-                    }}
-                  />
-                  {keywordsInput && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {parseCommaSeparated(keywordsInput).map((kw, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">
-                          {kw}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = parseCommaSeparated(keywordsInput).filter((_, j) => j !== i)
-                              setKeywordsInput(formatAsCommaSeparated(updated))
-                              form.setValue('keywords', updated)
-                            }}
-                            className="ml-1 hover:text-destructive"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </>
+              <div className="relative">
+                <Input
+                  placeholder="analytics, metrics, dashboard, reporting (comma-separated)"
+                  value={keywordsInput}
+                  onChange={(e) => {
+                    setKeywordsInput(e.target.value)
+                    form.setValue('keywords', parseCommaSeparated(e.target.value))
+                  }}
+                  disabled={generating}
+                  className={generating ? 'opacity-0' : ''}
+                />
+                {generating && (
+                  <Skeleton className="h-10 w-full absolute inset-0" />
+                )}
+              </div>
+              {!generating && keywordsInput && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {parseCommaSeparated(keywordsInput).map((kw, i) => (
+                    <Badge key={`kw-${i}`} variant="secondary" className="text-xs">
+                      {kw}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = parseCommaSeparated(keywordsInput).filter((_, j) => j !== i)
+                          setKeywordsInput(formatAsCommaSeparated(updated))
+                          form.setValue('keywords', updated)
+                        }}
+                        className="ml-1 hover:text-destructive"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               )}
               {form.formState.errors.keywords && (
                 <p className="text-sm text-destructive">{form.formState.errors.keywords.message}</p>
@@ -232,39 +241,40 @@ export function ProductStep({ onComplete }: ProductStepProps) {
             {/* Subreddits */}
             <div className="space-y-2">
               <FormLabel>Subreddits to Monitor</FormLabel>
-              {generating ? (
-                <Skeleton className="h-10 w-full" />
-              ) : (
-                <>
-                  <Input
-                    placeholder="SaaS, startups, Entrepreneur (comma-separated, without r/)"
-                    value={subredditsInput}
-                    onChange={(e) => {
-                      setSubredditsInput(e.target.value)
-                      form.setValue('subreddits', parseCommaSeparated(e.target.value))
-                    }}
-                  />
-                  {subredditsInput && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {parseCommaSeparated(subredditsInput).map((sub, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">
-                          r/{sub}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const updated = parseCommaSeparated(subredditsInput).filter((_, j) => j !== i)
-                              setSubredditsInput(formatAsCommaSeparated(updated))
-                              form.setValue('subreddits', updated)
-                            }}
-                            className="ml-1 hover:text-destructive"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </>
+              <div className="relative">
+                <Input
+                  placeholder="SaaS, startups, Entrepreneur (comma-separated, without r/)"
+                  value={subredditsInput}
+                  onChange={(e) => {
+                    setSubredditsInput(e.target.value)
+                    form.setValue('subreddits', parseCommaSeparated(e.target.value))
+                  }}
+                  disabled={generating}
+                  className={generating ? 'opacity-0' : ''}
+                />
+                {generating && (
+                  <Skeleton className="h-10 w-full absolute inset-0" />
+                )}
+              </div>
+              {!generating && subredditsInput && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {parseCommaSeparated(subredditsInput).map((sub, i) => (
+                    <Badge key={`sub-${i}`} variant="outline" className="text-xs">
+                      r/{sub}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = parseCommaSeparated(subredditsInput).filter((_, j) => j !== i)
+                          setSubredditsInput(formatAsCommaSeparated(updated))
+                          form.setValue('subreddits', updated)
+                        }}
+                        className="ml-1 hover:text-destructive"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               )}
               {form.formState.errors.subreddits && (
                 <p className="text-sm text-destructive">{form.formState.errors.subreddits.message}</p>
@@ -272,7 +282,7 @@ export function ProductStep({ onComplete }: ProductStepProps) {
             </div>
 
             <Button type="submit" disabled={saving || generating} className="w-full">
-              {saving ? 'Saving...' : 'Save Product & Complete Onboarding'}
+              {saving ? 'Saving...' : 'Save Product & Continue'}
             </Button>
           </form>
         </Form>
