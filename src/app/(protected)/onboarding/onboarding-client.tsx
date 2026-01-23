@@ -12,11 +12,12 @@ interface OnboardingClientProps {
   initialState: OnboardingState
 }
 
-const STEP_ORDER: OnboardingStep[] = ['persona', 'telegram', 'product']
+// Nova ordem: Product primeiro (coleta dados do site), depois Telegram, depois Persona
+const STEP_ORDER: OnboardingStep[] = ['product', 'telegram', 'persona']
 const STEP_NAMES: Record<OnboardingStep, string> = {
-  persona: 'Persona',
+  product: 'Produto',
   telegram: 'Telegram',
-  product: 'Product',
+  persona: 'Persona',
 }
 
 export function OnboardingClient({ initialState }: OnboardingClientProps) {
@@ -51,16 +52,16 @@ export function OnboardingClient({ initialState }: OnboardingClientProps) {
   return (
     <Card>
       <CardHeader className="space-y-4">
-        <CardTitle className="text-center">Welcome to Audy.not</CardTitle>
+        <CardTitle className="text-center">Bem-vindo ao Audy.not</CardTitle>
         <OnboardingStepper
           currentStep={currentStepIndex + 1}
           steps={steps}
         />
       </CardHeader>
       <CardContent>
-        {currentStep === 'persona' && (
-          <PersonaStep
-            onComplete={() => handleStepComplete('persona')}
+        {currentStep === 'product' && (
+          <ProductStep
+            onComplete={() => handleStepComplete('product')}
           />
         )}
         {currentStep === 'telegram' && (
@@ -69,9 +70,9 @@ export function OnboardingClient({ initialState }: OnboardingClientProps) {
             initiallyConnected={completedSteps.telegram}
           />
         )}
-        {currentStep === 'product' && (
-          <ProductStep
-            onComplete={() => handleStepComplete('product')}
+        {currentStep === 'persona' && (
+          <PersonaStep
+            onComplete={() => handleStepComplete('persona')}
           />
         )}
       </CardContent>

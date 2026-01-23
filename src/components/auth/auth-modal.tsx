@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -35,8 +36,13 @@ export function AuthModal({ open, onOpenChange, defaultView = 'signup' }: AuthMo
             <span className="text-2xl font-bold">Audy.not</span>
           </div>
           <DialogTitle className="text-center">
-            {view === 'login' ? 'Welcome back' : 'Create an account'}
+            {view === 'login' ? 'Bem-vindo de volta' : 'Criar uma conta'}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {view === 'login'
+              ? 'Entre com sua conta usando Google ou e-mail e senha'
+              : 'Crie sua conta usando Google ou e-mail e senha'}
+          </DialogDescription>
         </DialogHeader>
 
         {view === 'login' ? (

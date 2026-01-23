@@ -87,10 +87,10 @@ export async function skipTelegramStep() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
 
-  // Update onboarding step to product (skip telegram)
+  // Update onboarding step to persona (next step after telegram)
   await supabase
     .from('profiles')
-    .update({ onboarding_step: 'product' })
+    .update({ onboarding_step: 'persona' })
     .eq('id', user.id)
 
   revalidatePath('/onboarding')
@@ -102,10 +102,10 @@ export async function completeTelegramStep() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return
 
-  // Update onboarding step to product
+  // Update onboarding step to persona (next step after telegram)
   await supabase
     .from('profiles')
-    .update({ onboarding_step: 'product' })
+    .update({ onboarding_step: 'persona' })
     .eq('id', user.id)
 
   revalidatePath('/onboarding')

@@ -12,7 +12,7 @@ function SubmitButton() {
   const { pending } = useFormStatus()
   return (
     <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? 'Signing in...' : 'Sign in'}
+      {pending ? 'Entrando...' : 'Entrar'}
     </Button>
   )
 }
@@ -33,7 +33,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
       },
     })
     if (error) {
-      setResult({ error: 'Unable to sign in with Google. Please try again.' })
+      setResult({ error: 'Não foi possível entrar com o Google. Tente novamente.' })
     }
   }
 
@@ -69,7 +69,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
           />
         </svg>
-        Continue with Google
+        Continuar com o Google
       </Button>
 
       {/* Divider */}
@@ -79,7 +79,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            Or continue with email
+            Ou continue por e-mail
           </span>
         </div>
       </div>
@@ -92,12 +92,13 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
       {/* Email/password form */}
       <form action={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="login-email">E-mail</Label>
           <Input
-            id="email"
+            id="login-email"
             name="email"
             type="email"
-            placeholder="you@example.com"
+            autoComplete="email"
+            placeholder="você@exemplo.com"
             required
           />
           {result.fieldErrors?.email && (
@@ -106,11 +107,12 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="login-password">Senha</Label>
           <Input
-            id="password"
+            id="login-password"
             name="password"
             type="password"
+            autoComplete="current-password"
             required
           />
           {result.fieldErrors?.password && (
@@ -123,13 +125,13 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
 
       {/* Switch to signup */}
       <p className="text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{' '}
+        Não tem uma conta?{' '}
         <button
           type="button"
           onClick={onSwitchToSignup}
           className="text-primary underline-offset-4 hover:underline"
         >
-          Sign up
+          Criar conta
         </button>
       </p>
     </div>

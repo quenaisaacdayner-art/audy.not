@@ -16,7 +16,7 @@ export function OnboardingStepper({ currentStep, steps }: OnboardingStepperProps
     <div className="w-full">
       {/* Step indicator text */}
       <p className="text-sm text-muted-foreground text-center mb-4">
-        Step {currentStep} of {steps.length}
+        Passo {currentStep} de {steps.length}
       </p>
 
       {/* Progress bar with circles */}

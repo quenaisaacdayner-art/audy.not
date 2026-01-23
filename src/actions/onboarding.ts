@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-export type OnboardingStep = 'persona' | 'telegram' | 'product'
+export type OnboardingStep = 'product' | 'telegram' | 'persona'
 
 export interface OnboardingState {
   currentStep: OnboardingStep
@@ -53,18 +53,19 @@ export async function getOnboardingState(): Promise<OnboardingState | null> {
   const hasProduct = (products?.length ?? 0) > 0
 
   // Determine current step based on saved step or completion status
-  let currentStep: OnboardingStep = 'persona'
+  // Nova ordem: Product -> Telegram -> Persona
+  let currentStep: OnboardingStep = 'product'
 
   if (profile?.onboarding_step) {
     currentStep = profile.onboarding_step as OnboardingStep
   } else {
     // Fallback: determine from completion status
-    if (!hasPersona) {
-      currentStep = 'persona'
-    } else if (!hasProduct) {
-      currentStep = 'telegram' // Default to telegram after persona
-    } else {
+    if (!hasProduct) {
       currentStep = 'product'
+    } else if (!hasPersona) {
+      currentStep = 'telegram' // Default to telegram after product
+    } else {
+      currentStep = 'persona'
     }
   }
 

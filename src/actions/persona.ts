@@ -48,14 +48,11 @@ export async function savePersona(formData: PersonaFormData): Promise<PersonaAct
 
   if (upsertError) {
     console.error('Persona save error:', upsertError)
-    return { success: false, error: 'Failed to save persona' }
+    return { success: false, error: 'Falha ao salvar persona' }
   }
 
-  // Update onboarding step
-  await supabase
-    .from('profiles')
-    .update({ onboarding_step: 'telegram' })
-    .eq('id', user.id)
+  // Persona is the last step - no need to update onboarding_step
+  // The client will call completeOnboarding() which sets onboarding_completed=true
 
   revalidatePath('/onboarding')
 

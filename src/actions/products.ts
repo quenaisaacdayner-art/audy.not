@@ -83,8 +83,14 @@ export async function saveProduct(formData: ProductFormData & { url: string }): 
 
   if (insertError) {
     console.error('Product save error:', insertError)
-    return { success: false, error: 'Failed to save product' }
+    return { success: false, error: 'Falha ao salvar produto' }
   }
+
+  // Update onboarding step to telegram (next step after product)
+  await supabase
+    .from('profiles')
+    .update({ onboarding_step: 'telegram' })
+    .eq('id', user.id)
 
   revalidatePath('/onboarding')
   revalidatePath('/dashboard')

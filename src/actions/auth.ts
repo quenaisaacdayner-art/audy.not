@@ -32,7 +32,7 @@ export async function signUp(formData: FormData): Promise<AuthResult> {
 
   if (error) {
     // Generic message for security (don't reveal if email exists)
-    return { error: 'Unable to create account. Please try again.' }
+    return { error: 'Não foi possível criar a conta. Tente novamente.' }
   }
 
   redirect('/onboarding')
@@ -58,7 +58,7 @@ export async function signIn(formData: FormData): Promise<AuthResult> {
 
   if (error) {
     // Generic message for security
-    return { error: 'Invalid credentials' }
+    return { error: 'Credenciais inválidas' }
   }
 
   // Check if onboarding completed

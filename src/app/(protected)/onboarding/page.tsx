@@ -18,8 +18,8 @@ export default async function OnboardingPage() {
     redirect('/')
   }
 
-  // If user has product, onboarding is complete
-  if (state.hasProduct) {
+  // If user has all three (product, telegram optional, persona), onboarding is complete
+  if (state.hasProduct && state.hasPersona) {
     await completeOnboarding()
     // redirect happens in completeOnboarding
   }
