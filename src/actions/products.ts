@@ -109,3 +109,90 @@ export async function getUserProducts() {
 
   return data || []
 }
+
+export async function getProduct(id: string) {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+
+  const { data } = await supabase
+    .from('products')
+    .select('*')
+    .eq('id', id)
+    .eq('user_id', user.id)  // Ensure user owns product
+    .single()
+
+  return data
+}
+
+export async function updateProduct(
+  id: string,
+  formData: ProductFormData
+): Promise<SaveProductResult> {
+  const supabase = await createClient()
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) {
+    return { success: false, error: 'Not authenticated' }
+  }
+
+  // Validate input
+  const validationResult = productFormSchema.safeParse(formData)
+  if (!validationResult.success) {
+    return {
+      success: false,
+      error: validationResult.error.issues[0]?.message || 'Invalid input'
+    }
+  }
+
+  const data = validationResult.data
+
+  // Update product (RLS ensures user owns it)
+  const { error: updateError } = await supabase
+    .from('products')
+    .update({
+      name: data.name,
+      description: data.description,
+      keywords: data.keywords,
+      subreddits: data.subreddits,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .eq('user_id', user.id)
+
+  if (updateError) {
+    console.error('Product update error:', updateError)
+    return { success: false, error: 'Failed to update product' }
+  }
+
+  revalidatePath('/products')
+  revalidatePath(`/products/${id}`)
+
+  return { success: true, productId: id }
+}
+
+export async function deleteProduct(id: string): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createClient()
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) {
+    return { success: false, error: 'Not authenticated' }
+  }
+
+  const { error: deleteError } = await supabase
+    .from('products')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', user.id)
+
+  if (deleteError) {
+    console.error('Product delete error:', deleteError)
+    return { success: false, error: 'Failed to delete product' }
+  }
+
+  revalidatePath('/products')
+  revalidatePath('/dashboard')
+
+  return { success: true }
+}
