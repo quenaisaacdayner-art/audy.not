@@ -6,16 +6,16 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 07 (Onboarding Flow Integration) complete.
+**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 08 (Product CRUD Pages) complete.
 
 ## Current Position
 
 **Phase:** 2 of 6 (Onboarding and Products)
-**Plan:** 7 of 9 complete
+**Plan:** 8 of 9 complete
 **Status:** In progress
-**Last activity:** 2026-01-23 - Completed 02-07-PLAN.md
+**Last activity:** 2026-01-23 - Completed 02-08-PLAN.md
 
-**Progress:** [#######---] 70%
+**Progress:** [########--] 80%
 
 ### Phase 2 Goal
 Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted product generation.
@@ -28,7 +28,7 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 5. [x] 02-05: Telegram Connection Step
 6. [x] 02-06: Product Step with URL Scraping
 7. [x] 02-07: Onboarding Flow Integration
-8. [ ] 02-08: Dashboard Redirect
+8. [x] 02-08: Product CRUD Pages
 9. [ ] 02-09: Settings Page
 
 ## Performance Metrics
@@ -36,9 +36,9 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Metric | Value |
 |--------|-------|
 | Phases completed | 1/6 |
-| Requirements done | 7/39 |
-| Plans executed | 12 |
-| Session commits | 31 |
+| Requirements done | 8/39 |
+| Plans executed | 13 |
+| Session commits | 34 |
 
 ## Accumulated Context
 
@@ -69,6 +69,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Toast + inline error | Dual feedback (toast + inline warning) when AI generation fails | 2 |
 | Server-client split | Server page loads state, client component manages transitions | 2 |
 | Fixed step order | Persona -> Telegram -> Product, no backwards navigation | 2 |
+| Delete confirmation dialog | AlertDialog for destructive actions to prevent accidental data loss | 2 |
+| Edit form pattern reuse | Comma-separated inputs with badges, consistent with onboarding | 2 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -94,15 +96,16 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Completed 02-07: Onboarding Flow Integration
-- Created onboarding state actions (src/actions/onboarding.ts)
-- Created OnboardingStepper component showing progress
-- Updated onboarding page with step container and client component
-- All three steps (Persona, Telegram, Product) now orchestrated
+- Completed 02-08: Product CRUD Pages
+- Extended src/actions/products.ts with getProduct, updateProduct, deleteProduct
+- Created products list page at /products
+- Created product detail page at /products/[id]
+- Created product edit page at /products/[id]/edit
+- Added shadcn alert-dialog for delete confirmation
 
 ### What Happens Next
-- Execute 02-08: Dashboard Redirect
-- Create placeholder dashboard page that users reach after completing onboarding
+- Execute 02-09: Settings Page
+- Create user settings page for profile and account management
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
@@ -110,14 +113,12 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 - Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
-- Onboarding flow complete:
-  - src/actions/onboarding.ts (state management)
-  - src/components/onboarding/onboarding-stepper.tsx (progress bar)
-  - src/components/onboarding/persona-step.tsx
-  - src/components/onboarding/telegram-step.tsx
-  - src/components/onboarding/product-step.tsx
-  - src/app/(protected)/onboarding/page.tsx + onboarding-client.tsx
-- Product actions: src/actions/products.ts (generateProductFromUrl, saveProduct)
+- Onboarding flow complete (all in src/app/(protected)/onboarding/)
+- Product CRUD complete:
+  - src/actions/products.ts (full CRUD + AI generation)
+  - src/app/(protected)/products/page.tsx (list)
+  - src/app/(protected)/products/[id]/page.tsx (detail)
+  - src/app/(protected)/products/[id]/edit/page.tsx (edit)
 - Auth flow complete from Phase 1
 - Mode: yolo (minimal confirmations)
 - Depth: standard
