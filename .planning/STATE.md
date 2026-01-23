@@ -1,21 +1,21 @@
 # State: Audy.not
 
-**Session:** 2026-01-22
+**Session:** 2026-01-23
 
 ## Project Reference
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 06 (Product Step with URL Scraping) complete.
+**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 07 (Onboarding Flow Integration) complete.
 
 ## Current Position
 
 **Phase:** 2 of 6 (Onboarding and Products)
-**Plan:** 6 of 9 complete
+**Plan:** 7 of 9 complete
 **Status:** In progress
-**Last activity:** 2026-01-22 - Completed 02-06-PLAN.md
+**Last activity:** 2026-01-23 - Completed 02-07-PLAN.md
 
-**Progress:** [######----] 60%
+**Progress:** [#######---] 70%
 
 ### Phase 2 Goal
 Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted product generation.
@@ -27,7 +27,7 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 4. [x] 02-04: Persona Step UI
 5. [x] 02-05: Telegram Connection Step
 6. [x] 02-06: Product Step with URL Scraping
-7. [ ] 02-07: Onboarding Flow Integration
+7. [x] 02-07: Onboarding Flow Integration
 8. [ ] 02-08: Dashboard Redirect
 9. [ ] 02-09: Settings Page
 
@@ -36,9 +36,9 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Metric | Value |
 |--------|-------|
 | Phases completed | 1/6 |
-| Requirements done | 6/39 |
-| Plans executed | 11 |
-| Session commits | 28 |
+| Requirements done | 7/39 |
+| Plans executed | 12 |
+| Session commits | 31 |
 
 ## Accumulated Context
 
@@ -67,6 +67,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | 30-minute token expiry | Balance security and convenience for Telegram connection | 2 |
 | Comma-separated tag input | User types comma-separated keywords/subreddits, shown as editable badges | 2 |
 | Toast + inline error | Dual feedback (toast + inline warning) when AI generation fails | 2 |
+| Server-client split | Server page loads state, client component manages transitions | 2 |
+| Fixed step order | Persona -> Telegram -> Product, no backwards navigation | 2 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -92,14 +94,15 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Completed 02-06: Product Step with URL Scraping
-- Created product server actions (src/actions/products.ts)
-- Created ProductStep UI component with AI generation and skeleton loading
-- Added shadcn badge and sonner components
+- Completed 02-07: Onboarding Flow Integration
+- Created onboarding state actions (src/actions/onboarding.ts)
+- Created OnboardingStepper component showing progress
+- Updated onboarding page with step container and client component
+- All three steps (Persona, Telegram, Product) now orchestrated
 
 ### What Happens Next
-- Execute 02-07: Onboarding Flow Integration
-- Compose all three steps (PersonaStep, TelegramStep, ProductStep) into onboarding page
+- Execute 02-08: Dashboard Redirect
+- Create placeholder dashboard page that users reach after completing onboarding
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
@@ -107,10 +110,13 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 - Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
-- All step components ready:
+- Onboarding flow complete:
+  - src/actions/onboarding.ts (state management)
+  - src/components/onboarding/onboarding-stepper.tsx (progress bar)
   - src/components/onboarding/persona-step.tsx
   - src/components/onboarding/telegram-step.tsx
   - src/components/onboarding/product-step.tsx
+  - src/app/(protected)/onboarding/page.tsx + onboarding-client.tsx
 - Product actions: src/actions/products.ts (generateProductFromUrl, saveProduct)
 - Auth flow complete from Phase 1
 - Mode: yolo (minimal confirmations)
@@ -118,4 +124,4 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-22*
+*Last updated: 2026-01-23*
