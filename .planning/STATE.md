@@ -6,16 +6,16 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 05 (Telegram Connection Step) complete.
+**Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 06 (Product Step with URL Scraping) complete.
 
 ## Current Position
 
 **Phase:** 2 of 6 (Onboarding and Products)
-**Plan:** 5 of 9 complete
+**Plan:** 6 of 9 complete
 **Status:** In progress
-**Last activity:** 2026-01-22 - Completed 02-05-PLAN.md
+**Last activity:** 2026-01-22 - Completed 02-06-PLAN.md
 
-**Progress:** [#####-----] 50%
+**Progress:** [######----] 60%
 
 ### Phase 2 Goal
 Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted product generation.
@@ -26,7 +26,7 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 3. [x] 02-03: AI Clients Setup (Firecrawl + OpenAI)
 4. [x] 02-04: Persona Step UI
 5. [x] 02-05: Telegram Connection Step
-6. [ ] 02-06: Product Step with URL Scraping
+6. [x] 02-06: Product Step with URL Scraping
 7. [ ] 02-07: Onboarding Flow Integration
 8. [ ] 02-08: Dashboard Redirect
 9. [ ] 02-09: Settings Page
@@ -36,9 +36,9 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Metric | Value |
 |--------|-------|
 | Phases completed | 1/6 |
-| Requirements done | 5/39 |
-| Plans executed | 10 |
-| Session commits | 25 |
+| Requirements done | 6/39 |
+| Plans executed | 11 |
+| Session commits | 28 |
 
 ## Accumulated Context
 
@@ -65,6 +65,8 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Result pattern for APIs | {success, data, error} structure for all external APIs | 2 |
 | Manual connection check | No websocket/polling for Telegram, user clicks button | 2 |
 | 30-minute token expiry | Balance security and convenience for Telegram connection | 2 |
+| Comma-separated tag input | User types comma-separated keywords/subreddits, shown as editable badges | 2 |
+| Toast + inline error | Dual feedback (toast + inline warning) when AI generation fails | 2 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -90,13 +92,14 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Finalized 02-04: Persona Step UI
-- Committed persona-step.tsx and shadcn select/textarea components
-- Created 02-04-SUMMARY.md
+- Completed 02-06: Product Step with URL Scraping
+- Created product server actions (src/actions/products.ts)
+- Created ProductStep UI component with AI generation and skeleton loading
+- Added shadcn badge and sonner components
 
 ### What Happens Next
-- Execute 02-06: Product Step with URL Scraping
-- Build product form with URL input and AI-assisted generation
+- Execute 02-07: Onboarding Flow Integration
+- Compose all three steps (PersonaStep, TelegramStep, ProductStep) into onboarding page
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
@@ -104,8 +107,11 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 - Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
-- Telegram step: src/components/onboarding/telegram-step.tsx
-- Persona step: src/components/onboarding/persona-step.tsx
+- All step components ready:
+  - src/components/onboarding/persona-step.tsx
+  - src/components/onboarding/telegram-step.tsx
+  - src/components/onboarding/product-step.tsx
+- Product actions: src/actions/products.ts (generateProductFromUrl, saveProduct)
 - Auth flow complete from Phase 1
 - Mode: yolo (minimal confirmations)
 - Depth: standard
