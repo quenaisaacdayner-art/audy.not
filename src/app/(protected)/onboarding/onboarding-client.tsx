@@ -6,7 +6,7 @@ import { PersonaStep } from '@/components/onboarding/persona-step'
 import { TelegramStep } from '@/components/onboarding/telegram-step'
 import { ProductStep } from '@/components/onboarding/product-step'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { completeOnboarding, type OnboardingState, type OnboardingStep } from '@/actions/onboarding'
+import { completeOnboarding, updateOnboardingStep, type OnboardingState, type OnboardingStep } from '@/actions/onboarding'
 
 interface OnboardingClientProps {
   initialState: OnboardingState
@@ -30,7 +30,7 @@ export function OnboardingClient({ initialState }: OnboardingClientProps) {
 
   const currentStepIndex = STEP_ORDER.indexOf(currentStep)
 
-  function handleStepComplete(step: OnboardingStep) {
+  async function handleStepComplete(step: OnboardingStep) {
     setCompletedSteps(prev => ({ ...prev, [step]: true }))
 
     const currentIndex = STEP_ORDER.indexOf(step)
@@ -38,6 +38,8 @@ export function OnboardingClient({ initialState }: OnboardingClientProps) {
 
     if (nextStep) {
       setCurrentStep(nextStep)
+      // Persist the next step for resume scenarios
+      await updateOnboardingStep(nextStep)
     } else {
       // All steps complete - redirect to dashboard
       completeOnboarding()

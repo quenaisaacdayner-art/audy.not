@@ -52,20 +52,33 @@ export async function getOnboardingState(): Promise<OnboardingState | null> {
   const hasTelegram = !!telegram
   const hasProduct = (products?.length ?? 0) > 0
 
-  // Determine current step based on saved step or completion status
-  // Nova ordem: Product -> Telegram -> Persona
-  let currentStep: OnboardingStep = 'product'
+  // Determine current step based on completion status
+  // Nova ordem: Product(1) -> Telegram(2) -> Persona(3)
+  // Always calculate from completion - saved step may be stale from old order
 
+  const STEP_ORDER: OnboardingStep[] = ['product', 'telegram', 'persona']
+
+  // Calculate minimum step based on what's completed
+  let minStep: OnboardingStep = 'product'
+  if (hasProduct) {
+    minStep = 'telegram'
+  }
+
+  let currentStep: OnboardingStep = minStep
+
+  // Only use saved step if:
+  // 1. It's at or after the minimum step
+  // 2. Prerequisites for that step are met (can't be at telegram/persona without product)
   if (profile?.onboarding_step) {
-    currentStep = profile.onboarding_step as OnboardingStep
-  } else {
-    // Fallback: determine from completion status
-    if (!hasProduct) {
-      currentStep = 'product'
-    } else if (!hasPersona) {
-      currentStep = 'telegram' // Default to telegram after product
-    } else {
-      currentStep = 'persona'
+    const savedStep = profile.onboarding_step as OnboardingStep
+    const savedIndex = STEP_ORDER.indexOf(savedStep)
+    const minIndex = STEP_ORDER.indexOf(minStep)
+
+    // Prerequisites: telegram and persona require hasProduct
+    const prerequisitesMet = savedStep === 'product' || hasProduct
+
+    if (savedIndex >= minIndex && prerequisitesMet) {
+      currentStep = savedStep
     }
   }
 

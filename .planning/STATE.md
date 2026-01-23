@@ -8,6 +8,17 @@
 
 **Current Focus:** Phase 2 in progress - Onboarding and Products. Plan 08 (Product CRUD Pages) complete.
 
+## Deployment
+
+| Resource | URL |
+|----------|-----|
+| GitHub Repo | https://github.com/quenaisaacdayner-art/audy.not.git |
+| Vercel Production | https://audy-czsgde5bh-quenas-projects-e9d85eb0.vercel.app/ |
+| Vercel Env Vars | https://vercel.com/quenas-projects-e9d85eb0/audy-not/settings/environment-variables |
+
+**Testing:** Human verification via Vercel Preview Deployments (not localhost)
+**Deploy failures:** Analyze based on Vercel production environment behavior
+
 ## Current Position
 
 **Phase:** 2 of 6 (Onboarding and Products)
@@ -68,7 +79,7 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 | Comma-separated tag input | User types comma-separated keywords/subreddits, shown as editable badges | 2 |
 | Toast + inline error | Dual feedback (toast + inline warning) when AI generation fails | 2 |
 | Server-client split | Server page loads state, client component manages transitions | 2 |
-| Fixed step order | Persona -> Telegram -> Product, no backwards navigation | 2 |
+| Fixed step order | Product -> Telegram -> Persona, no backwards navigation | 2 |
 | Delete confirmation dialog | AlertDialog for destructive actions to prevent accidental data loss | 2 |
 | Edit form pattern reuse | Comma-separated inputs with badges, consistent with onboarding | 2 |
 
@@ -96,16 +107,14 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Completed 02-08: Product CRUD Pages
-- Extended src/actions/products.ts with getProduct, updateProduct, deleteProduct
-- Created products list page at /products
-- Created product detail page at /products/[id]
-- Created product edit page at /products/[id]/edit
-- Added shadcn alert-dialog for delete confirmation
+- Fixed onboarding step order: Product(1) -> Telegram(2) -> Persona(3)
+- Updated getOnboardingState() to calculate step from completion, not stale saved data
+- Added step persistence in onboarding-client.tsx for resume scenarios
 
 ### What Happens Next
-- Execute 02-09: Settings Page
-- Create user settings page for profile and account management
+- Test onboarding flow fix via Vercel Preview Deployment
+- Continue UAT verification for Phase 2
+- Execute 02-09: Settings Page after UAT passes
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
@@ -125,4 +134,4 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-23*
+*Last updated: 2026-01-23 (deployment info added, onboarding step order fixed)*
