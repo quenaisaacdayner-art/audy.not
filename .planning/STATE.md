@@ -90,10 +90,9 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Completed 02-05: Telegram Connection Step
-- Created Telegram server actions (src/actions/telegram.ts)
-- Created TelegramStep UI component with QR code and deep link
-- Added shadcn card component
+- Finalized 02-04: Persona Step UI
+- Committed persona-step.tsx and shadcn select/textarea components
+- Created 02-04-SUMMARY.md
 
 ### What Happens Next
 - Execute 02-06: Product Step with URL Scraping
@@ -106,6 +105,7 @@ Multi-step onboarding flow: Persona -> Telegram -> Product with AI-assisted prod
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
 - Telegram step: src/components/onboarding/telegram-step.tsx
+- Persona step: src/components/onboarding/persona-step.tsx
 - Auth flow complete from Phase 1
 - Mode: yolo (minimal confirmations)
 - Depth: standard
