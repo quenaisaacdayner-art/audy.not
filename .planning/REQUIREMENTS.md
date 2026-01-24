@@ -16,19 +16,19 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Onboarding
 
-- [ ] **ONBR-01**: User can connect Telegram via deep link flow
-- [ ] **ONBR-02**: User can configure persona (expertise, tone, phrases to avoid)
-- [ ] **ONBR-03**: User can add first product (via URL auto-sync or manually) to complete onboarding
-- [ ] **ONBR-04**: User is redirected to dashboard after completing onboarding
+- [x] **ONBR-01**: User can connect Telegram via deep link flow
+- [x] **ONBR-02**: User can configure persona (expertise, tone, phrases to avoid)
+- [x] **ONBR-03**: User can add first product (via URL auto-sync or manually) to complete onboarding
+- [x] **ONBR-04**: User is redirected to dashboard after completing onboarding
 
 ### Products
 
-- [ ] **PROD-01**: User enters SaaS URL; system uses Firecrawl + OpenAI to auto-generate name, description, keywords, and suggested subreddits
-- [ ] **PROD-02**: User can view list of their products
-- [ ] **PROD-03**: User can edit existing product
-- [ ] **PROD-04**: User can delete product
+- [x] **PROD-01**: User enters SaaS URL; system uses Firecrawl + OpenAI to auto-generate name, description, keywords, and suggested subreddits
+- [x] **PROD-02**: User can view list of their products
+- [x] **PROD-03**: User can edit existing product
+- [x] **PROD-04**: User can delete product
 - [ ] **PROD-05**: User is limited to 1 product on Free plan, 5 on Pro
-- [ ] **PROD-06**: If URL scraping fails or is partial, user can manually fill/edit all fields
+- [x] **PROD-06**: If URL scraping fails or is partial, user can manually fill/edit all fields
 
 ### Monitoring
 
@@ -45,7 +45,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **TELE-03**: User can approve opportunity via inline button
 - [ ] **TELE-04**: User can regenerate draft via inline button
 - [ ] **TELE-05**: User can discard opportunity via inline button
-- [ ] **TELE-06**: User receives welcome message when Telegram is connected
+- [x] **TELE-06**: User receives welcome message when Telegram is connected
 
 ### Mentions
 
@@ -134,16 +134,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| ONBR-01 | Phase 2 | Pending |
-| ONBR-02 | Phase 2 | Pending |
-| ONBR-03 | Phase 2 | Pending |
-| ONBR-04 | Phase 2 | Pending |
-| PROD-01 | Phase 2 | Pending |
-| PROD-02 | Phase 2 | Pending |
-| PROD-03 | Phase 2 | Pending |
-| PROD-04 | Phase 2 | Pending |
+| ONBR-01 | Phase 2 | Complete |
+| ONBR-02 | Phase 2 | Complete |
+| ONBR-03 | Phase 2 | Complete |
+| ONBR-04 | Phase 2 | Complete |
+| PROD-01 | Phase 2 | Complete |
+| PROD-02 | Phase 2 | Complete |
+| PROD-03 | Phase 2 | Complete |
+| PROD-04 | Phase 2 | Complete |
 | PROD-05 | Phase 6 | Pending |
-| PROD-06 | Phase 2 | Pending |
+| PROD-06 | Phase 2 | Complete |
 | MNTR-01 | Phase 3 | Pending |
 | MNTR-02 | Phase 3 | Pending |
 | MNTR-03 | Phase 3 | Pending |
@@ -154,7 +154,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TELE-03 | Phase 4 | Pending |
 | TELE-04 | Phase 4 | Pending |
 | TELE-05 | Phase 4 | Pending |
-| TELE-06 | Phase 2 | Pending |
+| TELE-06 | Phase 2 | Complete |
 | MENT-01 | Phase 3 | Pending |
 | MENT-02 | Phase 3 | Pending |
 | MENT-03 | Phase 3 | Pending |
@@ -186,4 +186,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-19*
-*Last updated: 2026-01-21 after Phase 1 completion*
+*Last updated: 2026-01-23 after Phase 2 completion*
