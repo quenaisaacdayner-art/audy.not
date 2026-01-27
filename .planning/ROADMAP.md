@@ -143,6 +143,12 @@ Plans:
 - Webhook handler for button callbacks
 - Real-time status updates in database
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Notification infrastructure (schema, types, notification module)
+- [ ] 04-02-PLAN.md — Callback handlers and cron integration
+
 ---
 
 ## Phase 5: Dashboard and Settings
