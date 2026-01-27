@@ -1,6 +1,8 @@
-import { Bot } from 'grammy'
+import { Bot, InlineKeyboard } from 'grammy'
 import { createClient } from '@supabase/supabase-js'
-import type { TelegramConnectionToken, TelegramConnection } from '@/types/database'
+import type { TelegramConnectionToken, TelegramConnection, Mention, Product, Persona } from '@/types/database'
+import { generateDraftReply } from '@/lib/openai/client'
+import { escapeHtml } from './notifications'
 
 // Bot instance (use env vars)
 const token = process.env.TELEGRAM_BOT_TOKEN
@@ -141,6 +143,152 @@ Please return to the Audy.not app to continue your onboarding.`
         'An unexpected error occurred. Please try again from the app.'
       )
     }
+  })
+
+  // Handle approve callback
+  bot.callbackQuery(/^approve:(.+)$/, async (ctx) => {
+    const mentionId = ctx.match[1]
+    try {
+      const { error } = await supabase
+        .from('mentions')
+        .update({ status: 'approved', updated_at: new Date().toISOString() })
+        .eq('id', mentionId)
+
+      if (error) throw error
+
+      await ctx.answerCallbackQuery({ text: 'Approved! Ready to post.' })
+      await ctx.editMessageReplyMarkup({ reply_markup: undefined })
+    } catch (error) {
+      console.error('Approve error:', error)
+      await ctx.answerCallbackQuery({ text: 'Failed to approve. Try again.' })
+    }
+  })
+
+  // Handle discard callback
+  bot.callbackQuery(/^discard:(.+)$/, async (ctx) => {
+    const mentionId = ctx.match[1]
+    try {
+      const { error } = await supabase
+        .from('mentions')
+        .update({ status: 'discarded', updated_at: new Date().toISOString() })
+        .eq('id', mentionId)
+
+      if (error) throw error
+
+      await ctx.answerCallbackQuery({ text: 'Discarded.' })
+      await ctx.editMessageReplyMarkup({ reply_markup: undefined })
+    } catch (error) {
+      console.error('Discard error:', error)
+      await ctx.answerCallbackQuery({ text: 'Failed to discard. Try again.' })
+    }
+  })
+
+  // Handle regenerate callback
+  bot.callbackQuery(/^regen:(.+)$/, async (ctx) => {
+    const mentionId = ctx.match[1]
+    try {
+      // Fetch mention with product details
+      const { data: mention, error: mentionError } = await supabase
+        .from('mentions')
+        .select('*, products(name, description, url)')
+        .eq('id', mentionId)
+        .single<Mention & { products: Pick<Product, 'name' | 'description' | 'url'> }>()
+
+      if (mentionError || !mention) {
+        await ctx.answerCallbackQuery({ text: 'Mention not found.' })
+        return
+      }
+
+      // Check regeneration limit
+      if (mention.regeneration_count >= 3) {
+        await ctx.answerCallbackQuery({
+          text: 'Regeneration limit reached (3/3). You can still approve or discard.',
+          show_alert: true,
+        })
+        return
+      }
+
+      // Show generating feedback
+      await ctx.answerCallbackQuery({ text: 'Generating new draft...' })
+
+      // Fetch persona for the user
+      const { data: persona } = await supabase
+        .from('personas')
+        .select('expertise, tone, phrases_to_avoid')
+        .eq('user_id', mention.user_id)
+        .single<Pick<Persona, 'expertise' | 'tone' | 'phrases_to_avoid'>>()
+
+      // Generate new draft
+      const product = mention.products
+      const reply = await generateDraftReply(
+        { title: mention.reddit_title, content: mention.reddit_content || '' },
+        {
+          name: product.name,
+          description: product.description || '',
+          url: product.url || undefined,
+        },
+        persona || { expertise: null, tone: null, phrases_to_avoid: null }
+      )
+
+      if (!reply.success || !reply.data) {
+        await ctx.reply('Failed to generate new draft. Please try again.')
+        return
+      }
+
+      // Update mention with new draft and increment regeneration_count
+      const newCount = mention.regeneration_count + 1
+      const { error: updateError } = await supabase
+        .from('mentions')
+        .update({
+          draft_reply: reply.data.reply,
+          regeneration_count: newCount,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', mentionId)
+
+      if (updateError) {
+        console.error('Update error:', updateError)
+        await ctx.reply('Failed to save new draft. Please try again.')
+        return
+      }
+
+      // Format attempt label
+      const attemptLabel = newCount === 3 ? '(final attempt)' : `(attempt ${newCount}/3)`
+
+      // Build new message with updated draft
+      const title = escapeHtml(mention.reddit_title)
+      const draft = escapeHtml(reply.data.reply)
+      const message = `<b>New opportunity in r/${mention.reddit_subreddit}</b> ${attemptLabel}
+
+<b>${title}</b>
+
+<b>Suggested reply:</b>
+${draft}
+
+<a href="${mention.reddit_permalink}">View on Reddit</a>`
+
+      // Create new keyboard (same buttons)
+      const keyboard = new InlineKeyboard()
+        .text('Approve', `approve:${mentionId}`)
+        .text('Regenerate', `regen:${mentionId}`)
+        .text('Discard', `discard:${mentionId}`)
+
+      // Send new message (not edit)
+      await ctx.reply(message, {
+        parse_mode: 'HTML',
+        reply_markup: keyboard,
+        link_preview_options: { is_disabled: true },
+      })
+    } catch (error) {
+      console.error('Regenerate error:', error)
+      await ctx.reply('An error occurred while regenerating. Please try again.')
+    }
+  })
+
+  // Catch-all callback handler (prevents stuck loading spinner)
+  bot.on('callback_query:data', async (ctx) => {
+    console.warn('Unknown callback query:', ctx.callbackQuery.data)
+    await ctx.answerCallbackQuery()
   })
 }
 
