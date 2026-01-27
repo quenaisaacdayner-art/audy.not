@@ -6,7 +6,7 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 3 Plan 03 complete. AI classification and reply generation ready.
+**Current Focus:** Phase 3 COMPLETE. Monitoring engine fully operational.
 
 ## Deployment
 
@@ -21,12 +21,12 @@
 
 ## Current Position
 
-**Phase:** 3 of 6 (Monitoring Engine)
-**Plan:** 3 of 5 complete
-**Status:** In progress
-**Last activity:** 2026-01-27 - Completed 03-03-PLAN.md (AI Classification and Reply Generation)
+**Phase:** 3 of 6 (Monitoring Engine) - COMPLETE
+**Plan:** 5 of 5 complete
+**Status:** Phase complete
+**Last activity:** 2026-01-27 - Completed 03-05-PLAN.md (Mentions List and Detail Pages)
 
-**Progress:** [#############-------] 65%
+**Progress:** [################----] 80%
 
 ### Phase 3 Goal
 Reddit monitoring engine: poll subreddits, classify intent via AI, generate persona-driven draft replies.
@@ -35,17 +35,17 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 1. [x] 03-01: Database Schema for Monitoring
 2. [x] 03-02: Reddit Client
 3. [x] 03-03: AI Classification and Reply Generation
-4. [ ] 03-04: Monitoring Cron Job
-5. [ ] 03-05: Mentions List and Detail Pages
+4. [x] 03-04: Monitoring Cron Job
+5. [x] 03-05: Mentions List and Detail Pages
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 2/6 |
-| Requirements done | 15/39 |
-| Plans executed | 16 |
-| Session commits | 41 |
+| Phases completed | 3/6 |
+| Requirements done | 18/39 |
+| Plans executed | 17 |
+| Session commits | 43 |
 
 ## Accumulated Context
 
@@ -86,6 +86,8 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 | Balanced AI strictness | Show all pain_point/recommendation_request posts, user discards irrelevant | 3 |
 | Adaptive reply length | Match reply length to post length (<200/200-500/>500 chars) | 3 |
 | Soft product mention | Help-first approach, subtle mention at end | 3 |
+| Client-side status filtering | Simple UX, no server round-trips for filter changes | 3 |
+| Copy reply client component | Clipboard API requires client-side JS | 3 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -112,30 +114,35 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 ## Session Continuity
 
 ### What Just Happened
-- Executed 03-03-PLAN.md (AI Classification and Reply Generation)
-- Extended src/lib/openai/client.ts with classifyPostIntent and generateDraftReply
-- Added ClassificationResult and ReplyGenerationResult interfaces
-- Uses zodResponseFormat for type-safe structured outputs
-- Confidence scoring: 75%+/50-74%/<50% for balanced assessment
-- Adaptive length guidance for replies based on post length
-- All TypeScript compiles, build passes
-- Commits: be28809, 3f4f7f4
+- Executed 03-05-PLAN.md (Mentions List and Detail Pages)
+- Created mentions list page with status filter tabs
+- Created mention detail page with draft reply display
+- Added CopyReplyButton client component for clipboard
+- "Last checked: X ago" displays from monitoring_state
+- Phase 3 complete
+- Commits: 3c3ac7c, 2bf32c8
 
 ### What Happens Next
-- Execute 03-04: Monitoring Cron Job
-- Execute 03-05: Mentions List and Detail Pages
+- Phase 4: Telegram Actions
+- Execute 04-01: Telegram Notification Handler
+- Execute 04-02: Mention Action Buttons
 
 ### Context for Next Session
-- All planning artifacts in \`.planning/\` directory
+- All planning artifacts in `.planning/` directory
 - Tech stack: Next.js 16, TypeScript, Supabase, Tailwind 4, shadcn/ui
 - Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Reddit client: src/lib/reddit/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
-- New mention types: src/types/database.ts (Mention, MonitoringState)
-- New Zod schemas: src/lib/validations/mention.ts (PostIntentSchema, DraftReplySchema)
+- Mention types: src/types/database.ts (Mention, MonitoringState)
+- Zod schemas: src/lib/validations/mention.ts (PostIntentSchema, DraftReplySchema)
 - AI functions: classifyPostIntent, generateDraftReply in src/lib/openai/client.ts
 - Migration pending: supabase/migrations/00003_mentions.sql
+- Mentions UI:
+  - src/app/(protected)/mentions/page.tsx (list)
+  - src/app/(protected)/mentions/mentions-list.tsx (client filtering)
+  - src/app/(protected)/mentions/[id]/page.tsx (detail)
+  - src/app/(protected)/mentions/[id]/copy-reply-button.tsx (copy)
 - Onboarding flow complete (all in src/app/(protected)/onboarding/)
 - Product CRUD complete:
   - src/actions/products.ts (full CRUD + AI generation)
@@ -148,4 +155,4 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-27 (Plan 03-03 complete)*
+*Last updated: 2026-01-27 (Phase 3 complete)*
