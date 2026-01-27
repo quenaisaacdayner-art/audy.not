@@ -61,6 +61,7 @@ export interface Mention {
   confidence: number
   draft_reply: string | null
   status: 'pending' | 'approved' | 'discarded' | 'regenerated'
+  regeneration_count: number
   created_at: string
   updated_at: string
 }
@@ -125,10 +126,11 @@ export interface Database {
       }
       mentions: {
         Row: Mention
-        Insert: Omit<Mention, 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<Mention, 'id' | 'created_at' | 'updated_at' | 'regeneration_count'> & {
           id?: string
           created_at?: string
           updated_at?: string
+          regeneration_count?: number
         }
         Update: Partial<Omit<Mention, 'id' | 'product_id' | 'user_id' | 'created_at'>>
         Relationships: []
