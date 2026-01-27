@@ -6,7 +6,7 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 3 COMPLETE. Monitoring engine fully operational.
+**Current Focus:** Phase 4 in progress. Telegram notification infrastructure ready.
 
 ## Deployment
 
@@ -21,31 +21,28 @@
 
 ## Current Position
 
-**Phase:** 3 of 6 (Monitoring Engine) - COMPLETE
-**Plan:** 5 of 5 complete
-**Status:** Phase complete
-**Last activity:** 2026-01-27 - Completed 03-05-PLAN.md (Mentions List and Detail Pages)
+**Phase:** 4 of 6 (Telegram Notifications and Actions)
+**Plan:** 1 of 2 complete
+**Status:** In progress
+**Last activity:** 2026-01-27 - Completed 04-01-PLAN.md (Telegram Notification Handler)
 
-**Progress:** [################----] 80%
+**Progress:** [#################---] 85%
 
-### Phase 3 Goal
-Reddit monitoring engine: poll subreddits, classify intent via AI, generate persona-driven draft replies.
+### Phase 4 Goal
+Deliver mentions to users via Telegram and enable in-chat actions (approve, regenerate, discard).
 
-### Phase 3 Progress
-1. [x] 03-01: Database Schema for Monitoring
-2. [x] 03-02: Reddit Client
-3. [x] 03-03: AI Classification and Reply Generation
-4. [x] 03-04: Monitoring Cron Job
-5. [x] 03-05: Mentions List and Detail Pages
+### Phase 4 Progress
+1. [x] 04-01: Telegram Notification Handler
+2. [ ] 04-02: Mention Action Buttons (callback handlers)
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
 | Phases completed | 3/6 |
-| Requirements done | 18/39 |
-| Plans executed | 17 |
-| Session commits | 43 |
+| Requirements done | 19/39 |
+| Plans executed | 18 |
+| Session commits | 46 |
 
 ## Accumulated Context
 
@@ -88,6 +85,8 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 | Soft product mention | Help-first approach, subtle mention at end | 3 |
 | Client-side status filtering | Simple UX, no server round-trips for filter changes | 3 |
 | Copy reply client component | Clipboard API requires client-side JS | 3 |
+| Simple callback data format | action:uuid fits within 64-byte Telegram limit | 4 |
+| 1500ms batch delay | Rate limiting for Telegram (1 msg/sec per chat) | 4 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -105,6 +104,7 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 | Get Firecrawl API key | Sign up at firecrawl.dev | 2 |
 | Get OpenAI API key | Create at platform.openai.com | 2 |
 | Execute Phase 3 migration | Run 00003_mentions.sql in Supabase Dashboard | 3 |
+| Execute Phase 4 migration | Run 00004_regeneration_count.sql in Supabase Dashboard | 4 |
 
 ### Blockers
 | Blocker | Status | Resolution |
@@ -114,18 +114,16 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 ## Session Continuity
 
 ### What Just Happened
-- Executed 03-05-PLAN.md (Mentions List and Detail Pages)
-- Created mentions list page with status filter tabs
-- Created mention detail page with draft reply display
-- Added CopyReplyButton client component for clipboard
-- "Last checked: X ago" displays from monitoring_state
-- Phase 3 complete
-- Commits: 3c3ac7c, 2bf32c8
+- Executed 04-01-PLAN.md (Telegram Notification Handler)
+- Created migration for regeneration_count column on mentions table
+- Updated Mention type with regeneration_count field
+- Created notification module with HTML formatting and inline keyboard
+- sendMentionNotification and sendBatchNotifications ready for integration
+- Commits: 7bbaa83, e9c4a49, 4074e57
 
 ### What Happens Next
-- Phase 4: Telegram Actions
-- Execute 04-01: Telegram Notification Handler
-- Execute 04-02: Mention Action Buttons
+- Execute 04-02: Mention Action Buttons (callback handlers for approve/regen/discard)
+- Integrate notification sending with monitoring cron
 
 ### Context for Next Session
 - All planning artifacts in `.planning/` directory
@@ -134,10 +132,11 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Reddit client: src/lib/reddit/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
-- Mention types: src/types/database.ts (Mention, MonitoringState)
+- Telegram notifications: src/lib/telegram/notifications.ts exports sendMentionNotification, sendBatchNotifications
+- Mention types: src/types/database.ts (Mention with regeneration_count, MonitoringState)
 - Zod schemas: src/lib/validations/mention.ts (PostIntentSchema, DraftReplySchema)
 - AI functions: classifyPostIntent, generateDraftReply in src/lib/openai/client.ts
-- Migration pending: supabase/migrations/00003_mentions.sql
+- Migrations pending: 00003_mentions.sql, 00004_regeneration_count.sql
 - Mentions UI:
   - src/app/(protected)/mentions/page.tsx (list)
   - src/app/(protected)/mentions/mentions-list.tsx (client filtering)
@@ -155,4 +154,4 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-27 (Phase 3 complete)*
+*Last updated: 2026-01-27 (04-01 complete)*
