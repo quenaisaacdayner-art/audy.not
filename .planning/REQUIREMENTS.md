@@ -32,11 +32,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Monitoring
 
-- [ ] **MNTR-01**: System polls Reddit for new posts in user's configured subreddits
-- [ ] **MNTR-02**: System filters posts by user's configured keywords
-- [ ] **MNTR-03**: System classifies post intent via AI (pain point / recommendation request)
-- [ ] **MNTR-04**: System generates persona-driven draft reply for qualifying posts
-- [ ] **MNTR-05**: System deduplicates posts (same post not processed twice per product)
+- [x] **MNTR-01**: System polls Reddit for new posts in user's configured subreddits
+- [x] **MNTR-02**: System filters posts by user's configured keywords
+- [x] **MNTR-03**: System classifies post intent via AI (pain point / recommendation request)
+- [x] **MNTR-04**: System generates persona-driven draft reply for qualifying posts
+- [x] **MNTR-05**: System deduplicates posts (same post not processed twice per product)
 
 ### Telegram
 
@@ -49,9 +49,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Mentions
 
-- [ ] **MENT-01**: User can view list of all mentions with status filters
-- [ ] **MENT-02**: User can see mention details (post, draft, status, timestamps)
-- [ ] **MENT-03**: Mentions track status: pending, approved, discarded, regenerated
+- [x] **MENT-01**: User can view list of all mentions with status filters
+- [x] **MENT-02**: User can see mention details (post, draft, status, timestamps)
+- [x] **MENT-03**: Mentions track status: pending, approved, discarded, regenerated
 
 ### Billing
 
@@ -144,20 +144,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PROD-04 | Phase 2 | Complete |
 | PROD-05 | Phase 6 | Pending |
 | PROD-06 | Phase 2 | Complete |
-| MNTR-01 | Phase 3 | Pending |
-| MNTR-02 | Phase 3 | Pending |
-| MNTR-03 | Phase 3 | Pending |
-| MNTR-04 | Phase 3 | Pending |
-| MNTR-05 | Phase 3 | Pending |
+| MNTR-01 | Phase 3 | Complete |
+| MNTR-02 | Phase 3 | Complete |
+| MNTR-03 | Phase 3 | Complete |
+| MNTR-04 | Phase 3 | Complete |
+| MNTR-05 | Phase 3 | Complete |
 | TELE-01 | Phase 4 | Pending |
 | TELE-02 | Phase 4 | Pending |
 | TELE-03 | Phase 4 | Pending |
 | TELE-04 | Phase 4 | Pending |
 | TELE-05 | Phase 4 | Pending |
 | TELE-06 | Phase 2 | Complete |
-| MENT-01 | Phase 3 | Pending |
-| MENT-02 | Phase 3 | Pending |
-| MENT-03 | Phase 3 | Pending |
+| MENT-01 | Phase 3 | Complete |
+| MENT-02 | Phase 3 | Complete |
+| MENT-03 | Phase 3 | Complete |
 | BILL-01 | Phase 6 | Pending |
 | BILL-02 | Phase 6 | Pending |
 | BILL-03 | Phase 6 | Pending |
@@ -186,4 +186,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-19*
-*Last updated: 2026-01-23 after Phase 2 completion*
+*Last updated: 2026-01-27 after Phase 3 completion*

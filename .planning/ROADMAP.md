@@ -110,11 +110,11 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Database schema and TypeScript types for mentions
-- [ ] 03-02-PLAN.md — Reddit client for fetching public posts
-- [ ] 03-03-PLAN.md — AI classification and reply generation
-- [ ] 03-04-PLAN.md — Cron monitoring engine
-- [ ] 03-05-PLAN.md — Mentions list and detail UI
+- [x] 03-01-PLAN.md — Database schema and TypeScript types for mentions
+- [x] 03-02-PLAN.md — Reddit client for fetching public posts
+- [x] 03-03-PLAN.md — AI classification and reply generation
+- [x] 03-04-PLAN.md — Cron monitoring engine
+- [x] 03-05-PLAN.md — Mentions list and detail UI
 
 ---
 
@@ -222,7 +222,7 @@ Plans:
 |-------|------|--------------|--------|
 | 1 | Foundation and Authentication | 4 | Complete |
 | 2 | Onboarding and Products | 10 | Complete |
-| 3 | Monitoring Engine | 8 | Planned |
+| 3 | Monitoring Engine | 8 | Complete |
 | 4 | Telegram Notifications and Actions | 5 | Pending |
 | 5 | Dashboard and Settings | 12 | Pending |
 | 6 | Billing and Marketing | 8 | Pending |
@@ -256,4 +256,4 @@ All phases are sequential. Each phase depends on the previous phase completing.
 
 ---
 *Roadmap created: 2026-01-19*
-*Last updated: 2026-01-26*
+*Last updated: 2026-01-27*
