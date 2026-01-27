@@ -6,7 +6,7 @@
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 3 Plans 01 and 02 complete. Continuing monitoring engine.
+**Current Focus:** Phase 3 Plan 03 complete. AI classification and reply generation ready.
 
 ## Deployment
 
@@ -22,11 +22,11 @@
 ## Current Position
 
 **Phase:** 3 of 6 (Monitoring Engine)
-**Plan:** 2 of 5 complete
+**Plan:** 3 of 5 complete
 **Status:** In progress
-**Last activity:** 2026-01-27 - Completed 03-01-PLAN.md (Mentions schema and types)
+**Last activity:** 2026-01-27 - Completed 03-03-PLAN.md (AI Classification and Reply Generation)
 
-**Progress:** [############--------] 60%
+**Progress:** [#############-------] 65%
 
 ### Phase 3 Goal
 Reddit monitoring engine: poll subreddits, classify intent via AI, generate persona-driven draft replies.
@@ -34,8 +34,8 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 ### Phase 3 Progress
 1. [x] 03-01: Database Schema for Monitoring
 2. [x] 03-02: Reddit Client
-3. [ ] 03-03: Monitoring Cron Job
-4. [ ] 03-04: AI Classification and Reply Generation
+3. [x] 03-03: AI Classification and Reply Generation
+4. [ ] 03-04: Monitoring Cron Job
 5. [ ] 03-05: Mentions List and Detail Pages
 
 ## Performance Metrics
@@ -43,9 +43,9 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 | Metric | Value |
 |--------|-------|
 | Phases completed | 2/6 |
-| Requirements done | 14/39 |
-| Plans executed | 15 |
-| Session commits | 39 |
+| Requirements done | 15/39 |
+| Plans executed | 16 |
+| Session commits | 41 |
 
 ## Accumulated Context
 
@@ -83,6 +83,9 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 | Composite dedup key | UNIQUE(product_id, reddit_post_id) for mentions deduplication | 3 |
 | Monitoring state singleton | Single row tracks last run with CHECK(id = 1) | 3 |
 | Service role only state | No RLS on monitoring_state, cron uses service role | 3 |
+| Balanced AI strictness | Show all pain_point/recommendation_request posts, user discards irrelevant | 3 |
+| Adaptive reply length | Match reply length to post length (<200/200-500/>500 chars) | 3 |
+| Soft product mention | Help-first approach, subtle mention at end | 3 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -109,16 +112,17 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 ## Session Continuity
 
 ### What Just Happened
-- Executed 03-01-PLAN.md (Mentions Schema and Types)
-- Created supabase/migrations/00003_mentions.sql with mentions table and monitoring_state
-- Updated src/types/database.ts with Mention and MonitoringState interfaces
-- Created src/lib/validations/mention.ts with Zod schemas for AI outputs
+- Executed 03-03-PLAN.md (AI Classification and Reply Generation)
+- Extended src/lib/openai/client.ts with classifyPostIntent and generateDraftReply
+- Added ClassificationResult and ReplyGenerationResult interfaces
+- Uses zodResponseFormat for type-safe structured outputs
+- Confidence scoring: 75%+/50-74%/<50% for balanced assessment
+- Adaptive length guidance for replies based on post length
 - All TypeScript compiles, build passes
-- Commits: 683cbf5, 84590f4, a0152c9
+- Commits: be28809, 3f4f7f4
 
 ### What Happens Next
-- Execute 03-03: Monitoring Cron Job
-- Execute 03-04: AI Classification and Reply Generation
+- Execute 03-04: Monitoring Cron Job
 - Execute 03-05: Mentions List and Detail Pages
 
 ### Context for Next Session
@@ -130,6 +134,7 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
 - New mention types: src/types/database.ts (Mention, MonitoringState)
 - New Zod schemas: src/lib/validations/mention.ts (PostIntentSchema, DraftReplySchema)
+- AI functions: classifyPostIntent, generateDraftReply in src/lib/openai/client.ts
 - Migration pending: supabase/migrations/00003_mentions.sql
 - Onboarding flow complete (all in src/app/(protected)/onboarding/)
 - Product CRUD complete:
@@ -143,4 +148,4 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-27 (Plan 03-01 complete)*
+*Last updated: 2026-01-27 (Plan 03-03 complete)*
