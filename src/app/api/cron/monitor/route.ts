@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { fetchSubredditPosts, filterPostsByKeywords } from '@/lib/reddit/client'
 import { classifyPostIntent, generateDraftReply } from '@/lib/openai/client'
 import { createMention, checkMentionExists } from '@/actions/mentions'
+import { sendMentionNotification } from '@/lib/telegram/notifications'
+import type { Mention } from '@/types/database'
 
 export const maxDuration = 60 // Allow up to 60 seconds for processing
 
@@ -146,8 +148,31 @@ export async function GET(request: NextRequest) {
             draft_reply: reply.data?.reply || null,
           })
 
-          if (mentionResult.success) {
+          if (mentionResult.success && mentionResult.id) {
             stats.mentions_created++
+
+            // Fetch user's telegram connection
+            const { data: telegramConnection } = await supabase
+              .from('telegram_connections')
+              .select('telegram_chat_id')
+              .eq('user_id', product.user_id)
+              .single()
+
+            if (telegramConnection?.telegram_chat_id) {
+              // Fetch the full mention for notification
+              const { data: fullMention } = await supabase
+                .from('mentions')
+                .select('*')
+                .eq('id', mentionResult.id)
+                .single<Mention>()
+
+              if (fullMention) {
+                await sendMentionNotification(telegramConnection.telegram_chat_id, fullMention)
+
+                // Rate limit: 1.5s delay between notifications per CONTEXT.md
+                await new Promise(resolve => setTimeout(resolve, 1500))
+              }
+            }
           }
         }
       }
