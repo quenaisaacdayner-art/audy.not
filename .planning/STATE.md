@@ -1,12 +1,12 @@
 # State: Audy.not
 
-**Session:** 2026-01-23
+**Session:** 2026-01-26
 
 ## Project Reference
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 2 complete - Onboarding and Products verified. Ready for Phase 3.
+**Current Focus:** Phase 3 Plan 02 complete - Reddit client. Continuing monitoring engine.
 
 ## Deployment
 
@@ -21,27 +21,22 @@
 
 ## Current Position
 
-**Phase:** 2 of 6 (Onboarding and Products) - COMPLETE
-**Plan:** 8 of 8 complete
-**Status:** Complete, verified
-**Last activity:** 2026-01-23 - Phase 2 verified and closed
+**Phase:** 3 of 6 (Monitoring Engine)
+**Plan:** 2 of 5 complete
+**Status:** In progress
+**Last activity:** 2026-01-26 - Completed 03-02-PLAN.md (Reddit client)
 
-**Progress:** [##########] 100%
+**Progress:** [############--------] 60%
 
-### Phase 2 Goal
-Multi-step onboarding flow: Product -> Telegram -> Persona with AI-assisted product generation.
+### Phase 3 Goal
+Reddit monitoring engine: poll subreddits, classify intent via AI, generate persona-driven draft replies.
 
-### Phase 2 Progress
-1. [x] 02-01: Database Setup and Dependencies
-2. [x] 02-02: Telegram Bot Setup
-3. [x] 02-03: AI Clients Setup (Firecrawl + OpenAI)
-4. [x] 02-04: Persona Step UI
-5. [x] 02-05: Telegram Connection Step
-6. [x] 02-06: Product Step with URL Scraping
-7. [x] 02-07: Onboarding Flow Integration
-8. [x] 02-08: Product CRUD Pages
-
-**Verification:** PASSED (10/10 must-haves, 16/16 UAT tests)
+### Phase 3 Progress
+1. [ ] 03-01: Database Schema for Monitoring
+2. [x] 03-02: Reddit Client
+3. [ ] 03-03: Monitoring Cron Job
+4. [ ] 03-04: AI Classification and Reply Generation
+5. [ ] 03-05: Mentions List and Detail Pages
 
 ## Performance Metrics
 
@@ -49,8 +44,8 @@ Multi-step onboarding flow: Product -> Telegram -> Persona with AI-assisted prod
 |--------|-------|
 | Phases completed | 2/6 |
 | Requirements done | 14/39 |
-| Plans executed | 13 |
-| Session commits | 35 |
+| Plans executed | 14 |
+| Session commits | 36 |
 
 ## Accumulated Context
 
@@ -83,6 +78,8 @@ Multi-step onboarding flow: Product -> Telegram -> Persona with AI-assisted prod
 | Fixed step order | Product -> Telegram -> Persona, no backwards navigation | 2 |
 | Delete confirmation dialog | AlertDialog for destructive actions to prevent accidental data loss | 2 |
 | Edit form pattern reuse | Comma-separated inputs with badges, consistent with onboarding | 2 |
+| Silent skip 403/404 | Private/banned subreddits return empty posts, not errors | 3 |
+| User-Agent for Reddit | AudyBot/1.0 (Reddit Monitoring) - required by Reddit API | 3 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -108,22 +105,23 @@ Multi-step onboarding flow: Product -> Telegram -> Persona with AI-assisted prod
 ## Session Continuity
 
 ### What Just Happened
-- Phase 2 execution complete
-- Verification passed: 10/10 must-haves verified
-- UAT passed: 16/16 tests
-- All Phase 2 requirements marked complete in REQUIREMENTS.md
+- Executed 03-02-PLAN.md (Reddit Client)
+- Created src/lib/reddit/client.ts with fetchSubredditPosts and filterPostsByKeywords
+- TypeScript compiles, build passes
+- Committed: 8e67c68
 
 ### What Happens Next
-- Plan and execute Phase 3: Monitoring Engine
-- Reddit API integration for post polling
-- AI intent classification and reply generation
-- Mentions tracking system
+- Execute 03-01: Database Schema for Monitoring (mentions table)
+- Execute 03-03: Monitoring Cron Job
+- Execute 03-04: AI Classification and Reply Generation
+- Execute 03-05: Mentions List and Detail Pages
 
 ### Context for Next Session
-- All planning artifacts in `.planning/` directory
+- All planning artifacts in \`.planning/\` directory
 - Tech stack: Next.js 16, TypeScript, Supabase, Tailwind 4, shadcn/ui
 - Phase 2 dependencies: grammy, Firecrawl SDK, OpenAI SDK, qrcode.react
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
+- Reddit client: src/lib/reddit/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
 - Onboarding flow complete (all in src/app/(protected)/onboarding/)
 - Product CRUD complete:
@@ -137,4 +135,4 @@ Multi-step onboarding flow: Product -> Telegram -> Persona with AI-assisted prod
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-23 (Phase 2 complete and verified)*
+*Last updated: 2026-01-26 (Plan 03-02 complete)*
