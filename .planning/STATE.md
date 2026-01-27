@@ -1,12 +1,12 @@
 # State: Audy.not
 
-**Session:** 2026-01-26
+**Session:** 2026-01-27
 
 ## Project Reference
 
 **Core Value:** The human stays in the loop. AI curates and drafts; the human approves and posts.
 
-**Current Focus:** Phase 3 Plan 02 complete - Reddit client. Continuing monitoring engine.
+**Current Focus:** Phase 3 Plans 01 and 02 complete. Continuing monitoring engine.
 
 ## Deployment
 
@@ -24,7 +24,7 @@
 **Phase:** 3 of 6 (Monitoring Engine)
 **Plan:** 2 of 5 complete
 **Status:** In progress
-**Last activity:** 2026-01-26 - Completed 03-02-PLAN.md (Reddit client)
+**Last activity:** 2026-01-27 - Completed 03-01-PLAN.md (Mentions schema and types)
 
 **Progress:** [############--------] 60%
 
@@ -32,7 +32,7 @@
 Reddit monitoring engine: poll subreddits, classify intent via AI, generate persona-driven draft replies.
 
 ### Phase 3 Progress
-1. [ ] 03-01: Database Schema for Monitoring
+1. [x] 03-01: Database Schema for Monitoring
 2. [x] 03-02: Reddit Client
 3. [ ] 03-03: Monitoring Cron Job
 4. [ ] 03-04: AI Classification and Reply Generation
@@ -44,8 +44,8 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 |--------|-------|
 | Phases completed | 2/6 |
 | Requirements done | 14/39 |
-| Plans executed | 14 |
-| Session commits | 36 |
+| Plans executed | 15 |
+| Session commits | 39 |
 
 ## Accumulated Context
 
@@ -80,6 +80,9 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 | Edit form pattern reuse | Comma-separated inputs with badges, consistent with onboarding | 2 |
 | Silent skip 403/404 | Private/banned subreddits return empty posts, not errors | 3 |
 | User-Agent for Reddit | AudyBot/1.0 (Reddit Monitoring) - required by Reddit API | 3 |
+| Composite dedup key | UNIQUE(product_id, reddit_post_id) for mentions deduplication | 3 |
+| Monitoring state singleton | Single row tracks last run with CHECK(id = 1) | 3 |
+| Service role only state | No RLS on monitoring_state, cron uses service role | 3 |
 
 ### Technical Debt
 | Item | Priority | Phase |
@@ -96,6 +99,7 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 | Register webhook | curl API to setWebhook after deployment | 2 |
 | Get Firecrawl API key | Sign up at firecrawl.dev | 2 |
 | Get OpenAI API key | Create at platform.openai.com | 2 |
+| Execute Phase 3 migration | Run 00003_mentions.sql in Supabase Dashboard | 3 |
 
 ### Blockers
 | Blocker | Status | Resolution |
@@ -105,13 +109,14 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 ## Session Continuity
 
 ### What Just Happened
-- Executed 03-02-PLAN.md (Reddit Client)
-- Created src/lib/reddit/client.ts with fetchSubredditPosts and filterPostsByKeywords
-- TypeScript compiles, build passes
-- Committed: 8e67c68
+- Executed 03-01-PLAN.md (Mentions Schema and Types)
+- Created supabase/migrations/00003_mentions.sql with mentions table and monitoring_state
+- Updated src/types/database.ts with Mention and MonitoringState interfaces
+- Created src/lib/validations/mention.ts with Zod schemas for AI outputs
+- All TypeScript compiles, build passes
+- Commits: 683cbf5, 84590f4, a0152c9
 
 ### What Happens Next
-- Execute 03-01: Database Schema for Monitoring (mentions table)
 - Execute 03-03: Monitoring Cron Job
 - Execute 03-04: AI Classification and Reply Generation
 - Execute 03-05: Mentions List and Detail Pages
@@ -123,6 +128,9 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 - AI clients: src/lib/firecrawl/client.ts, src/lib/openai/client.ts
 - Reddit client: src/lib/reddit/client.ts
 - Telegram bot: src/lib/telegram/bot.ts exports bot + generateDeepLink
+- New mention types: src/types/database.ts (Mention, MonitoringState)
+- New Zod schemas: src/lib/validations/mention.ts (PostIntentSchema, DraftReplySchema)
+- Migration pending: supabase/migrations/00003_mentions.sql
 - Onboarding flow complete (all in src/app/(protected)/onboarding/)
 - Product CRUD complete:
   - src/actions/products.ts (full CRUD + AI generation)
@@ -135,4 +143,4 @@ Reddit monitoring engine: poll subreddits, classify intent via AI, generate pers
 
 ---
 *State initialized: 2026-01-19*
-*Last updated: 2026-01-26 (Plan 03-02 complete)*
+*Last updated: 2026-01-27 (Plan 03-01 complete)*
