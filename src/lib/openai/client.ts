@@ -164,3 +164,84 @@ Classify the intent and provide your confidence level.`
     }
   }
 }
+
+export async function generateDraftReply(
+  post: { title: string; content: string },
+  product: { name: string; description: string; url?: string },
+  persona: { expertise?: string | null; tone?: string | null; phrases_to_avoid?: string | null }
+): Promise<ReplyGenerationResult> {
+  if (!openai) {
+    return {
+      success: false,
+      data: null,
+      error: 'OpenAI is not configured. Please set OPENAI_API_KEY.'
+    }
+  }
+
+  // Calculate adaptive length guidance based on post length
+  const postLength = (post.title + post.content).length
+  const lengthGuidance = postLength < 200
+    ? 'Keep your reply concise (2-3 sentences)'
+    : postLength < 500
+    ? 'Match the moderate length of the post (3-5 sentences)'
+    : 'Provide a thoughtful, detailed response matching the depth of the post'
+
+  try {
+    const completion = await openai.chat.completions.parse({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content: `You are writing a helpful Reddit reply on behalf of someone with this profile:
+${persona.expertise ? `- Expertise: ${persona.expertise}` : ''}
+${persona.tone ? `- Communication style: ${persona.tone}` : '- Communication style: helpful and friendly'}
+${persona.phrases_to_avoid ? `- Avoid these phrases: ${persona.phrases_to_avoid}` : ''}
+
+Guidelines:
+1. ${lengthGuidance}
+2. Focus on genuinely helping with their problem first
+3. Only mention the product naturally at the end if it's relevant to solving their problem
+4. Use plain text only - no markdown, no bullet points, no formatting
+5. Sound like a real person sharing advice, not a marketing message
+6. If mentioning the product, be subtle: "I've had good results with [product]" not "You should try [product]!"
+
+Product to potentially mention:
+- Name: ${product.name}
+- What it does: ${product.description}
+${product.url ? `- URL: ${product.url}` : ''}`
+        },
+        {
+          role: 'user',
+          content: `Write a helpful reply to this post:
+
+Title: ${post.title}
+
+${post.content || '(no body text)'}`
+        }
+      ],
+      response_format: zodResponseFormat(DraftReplySchema, 'draft_reply'),
+    })
+
+    const parsed = completion.choices[0]?.message?.parsed
+
+    if (!parsed) {
+      return {
+        success: false,
+        data: null,
+        error: 'Failed to generate draft reply.'
+      }
+    }
+
+    return {
+      success: true,
+      data: parsed
+    }
+  } catch (error) {
+    console.error('OpenAI reply generation error:', error)
+    return {
+      success: false,
+      data: null,
+      error: error instanceof Error ? error.message : 'Failed to generate draft reply'
+    }
+  }
+}
