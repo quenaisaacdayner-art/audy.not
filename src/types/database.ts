@@ -46,6 +46,35 @@ export interface Product {
   updated_at: string
 }
 
+export interface Mention {
+  id: string
+  product_id: string
+  user_id: string
+  reddit_post_id: string
+  reddit_permalink: string
+  reddit_title: string
+  reddit_content: string | null
+  reddit_author: string
+  reddit_subreddit: string
+  reddit_created_at: string
+  intent: 'pain_point' | 'recommendation_request'
+  confidence: number
+  draft_reply: string | null
+  status: 'pending' | 'approved' | 'discarded' | 'regenerated'
+  created_at: string
+  updated_at: string
+}
+
+export interface MonitoringState {
+  id: number
+  last_checked_at: string | null
+  last_run_stats: {
+    products: number
+    posts_found: number
+    mentions_created: number
+  } | null
+}
+
 // For Supabase client type inference
 export interface Database {
   public: {
@@ -92,6 +121,22 @@ export interface Database {
           updated_at?: string
         }
         Update: Partial<Omit<Product, 'id' | 'user_id' | 'created_at'>>
+        Relationships: []
+      }
+      mentions: {
+        Row: Mention
+        Insert: Omit<Mention, 'id' | 'created_at' | 'updated_at'> & {
+          id?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: Partial<Omit<Mention, 'id' | 'product_id' | 'user_id' | 'created_at'>>
+        Relationships: []
+      }
+      monitoring_state: {
+        Row: MonitoringState
+        Insert: MonitoringState
+        Update: Partial<Omit<MonitoringState, 'id'>>
         Relationships: []
       }
     }
