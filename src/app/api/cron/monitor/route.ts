@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
       // Fetch posts from all subreddits - only test first one to reduce output
       const testSubreddit = product.subreddits[0]
       const fetchResult = await fetchSubredditPosts(testSubreddit)
-      debug.push(`r/${testSubreddit}: posts=${fetchResult.posts.length}, error=${fetchResult.error || 'none'}`)
+      debug.push(`r/${testSubreddit}: posts=${fetchResult.posts.length}, errorType=${typeof fetchResult.error}, error=${String(fetchResult.error)}`)
 
       for (const subreddit of product.subreddits) {
         const result = await fetchSubredditPosts(subreddit)
