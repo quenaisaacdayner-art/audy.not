@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceRoleClient()
   const stats = { products: 0, posts_found: 0, mentions_created: 0 }
+  const debug: string[] = []
 
   try {
     // 2. Get all products
@@ -57,14 +58,14 @@ export async function GET(request: NextRequest) {
     }
 
     stats.products = products.length
-    console.log(`Found ${products.length} products`)
+    debug.push(`Found ${products.length} products`)
 
     // 3. Process each product
     for (const product of products as ProductWithPersona[]) {
-      console.log(`Product: ${product.name}, subreddits: ${JSON.stringify(product.subreddits)}`)
+      debug.push(`Product: ${product.name}, subreddits: ${JSON.stringify(product.subreddits)}`)
       // Skip if no subreddits configured
       if (!product.subreddits?.length) {
-        console.log(`Skipping ${product.name} - no subreddits`)
+        debug.push(`Skipping ${product.name} - no subreddits`)
         continue
       }
 
@@ -77,11 +78,11 @@ export async function GET(request: NextRequest) {
 
       // Fetch posts from all subreddits
       for (const subreddit of product.subreddits) {
-        console.log(`Fetching r/${subreddit}...`)
+        debug.push(`Fetching r/${subreddit}...`)
         const fetchResult = await fetchSubredditPosts(subreddit)
-        console.log(`r/${subreddit}: success=${fetchResult.success}, posts=${fetchResult.posts.length}`)
+        debug.push(`r/${subreddit}: success=${fetchResult.success}, posts=${fetchResult.posts.length}`)
         if (!fetchResult.success) {
-          console.warn(`Failed to fetch r/${subreddit}:`, fetchResult.error)
+          debug.push(`Failed to fetch r/${subreddit}: ${fetchResult.error}`)
           continue
         }
 
@@ -192,7 +193,7 @@ export async function GET(request: NextRequest) {
       last_run_stats: stats,
     })
 
-    return Response.json({ success: true, stats })
+    return Response.json({ success: true, stats, debug })
   } catch (error) {
     console.error('Monitoring error:', error)
     return Response.json(
