@@ -23,7 +23,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const [saving, setSaving] = useState(false)
   const router = useRouter()
 
-  const [keywordsInput, setKeywordsInput] = useState(formatAsCommaSeparated(product.keywords))
+  const [keywordsInput, setKeywordsInput] = useState(formatAsCommaSeparated(product.keywords || []))
   const [subredditsInput, setSubredditsInput] = useState(formatAsCommaSeparated(product.subreddits))
 
   const form = useForm<ProductFormData>({
@@ -31,7 +31,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
     defaultValues: {
       name: product.name,
       description: product.description || '',
-      keywords: product.keywords,
+      keywords: product.keywords || [],
       subreddits: product.subreddits,
     },
   })

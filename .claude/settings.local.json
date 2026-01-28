@@ -12,7 +12,26 @@
       "Bash(npx @anthropic/claude-code-mcp-client context7 resolve-library-id:*)",
       "WebFetch(domain:grammy.dev)",
       "WebFetch(domain:core.telegram.org)",
-      "WebFetch(domain:www.launchfa.st)"
+      "WebFetch(domain:www.launchfa.st)",
+      "Bash(curl.exe -s \"https://audy-czsgde5bh-quenas-projects-e9d85eb0.vercel.app/api/cron/monitor\" -H \"Authorization: Bearer daynerpro123\")",
+      "Bash(vercel --version:*)",
+      "Bash(curl.exe -sL \"https://audy-czsgde5bh-quenas-projects-e9d85eb0.vercel.app/api/cron/monitor\" -H \"Authorization: Bearer daynerpro123\")",
+      "Bash(git push:*)",
+      "Bash(timeout /t 35 /nobreak)",
+      "Bash(curl.exe:*)",
+      "Bash(npm install -g vercel)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel logs:*)",
+      "Bash(vercel curl \"https://audy-not.vercel.app/api/cron/monitor\" -H \"Authorization: Bearer daynerpro123\")",
+      "Bash(vercel curl \"https://audy-not.vercel.app/api/cron/monitor\")",
+      "Bash(vercel curl /api/cron/monitor --deployment audy-not.vercel.app -- -H \"Authorization: Bearer daynerpro123\")",
+      "Bash(vercel curl /api/cron/monitor --deployment audy-not.vercel.app --yes -- -H \"Authorization: Bearer daynerpro123\")",
+      "Bash(vercel link:*)",
+      "Bash(vercel curl /api/cron/monitor -- -H \"Authorization: Bearer daynerpro123\")",
+      "Bash(vercel ls:*)",
+      "Bash(vercel projects:*)",
+      "Bash(vercel inspect:*)",
+      "Bash(vercel:*)"
     ]
   }
 }
