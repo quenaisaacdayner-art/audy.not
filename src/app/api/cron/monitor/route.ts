@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { fetchSubredditPosts, filterPostsByKeywords } from '@/lib/reddit/client'
 import { classifyPostIntent, generateDraftReply } from '@/lib/openai/client'
 import { createMention, checkMentionExists } from '@/actions/mentions'
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceRoleClient()
   const stats = { products: 0, posts_found: 0, mentions_created: 0 }
 
   try {
