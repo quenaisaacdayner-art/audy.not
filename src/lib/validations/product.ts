@@ -24,8 +24,9 @@ export const productFormSchema = z.object({
     .optional()
     .or(z.literal('')),
   keywords: z.array(z.string())
-    .min(1, 'Add at least one keyword')
-    .max(20, 'Maximum 20 keywords allowed'),
+    .max(20, 'Maximum 20 keywords allowed')
+    .optional()
+    .default([]),
   subreddits: z.array(z.string())
     .min(1, 'Add at least one subreddit')
     .max(20, 'Maximum 20 subreddits allowed'),
