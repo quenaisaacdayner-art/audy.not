@@ -57,7 +57,9 @@ export async function fetchSubredditPosts(
     const response = await fetch(url, {
       headers: {
         'User-Agent': USER_AGENT,
+        'Accept': 'application/json',
       },
+      next: { revalidate: 0 }, // Disable Next.js caching
     })
 
     // Handle rate limiting
@@ -86,10 +88,23 @@ export async function fetchSubredditPosts(
       }
     }
 
-    const data: RedditListingResponse = await response.json()
+    const text = await response.text()
+
+    // Debug: check if we got valid JSON
+    let data: RedditListingResponse
+    try {
+      data = JSON.parse(text)
+    } catch {
+      console.error('Reddit response not JSON:', text.substring(0, 500))
+      return {
+        success: false,
+        posts: [],
+        error: 'Invalid JSON response from Reddit',
+      }
+    }
 
     // Extract posts from Reddit's listing structure
-    const posts = data.data.children.map((child) => child.data)
+    const posts = data.data?.children?.map((child) => child.data) || []
 
     return {
       success: true,
