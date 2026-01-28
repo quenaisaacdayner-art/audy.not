@@ -78,11 +78,9 @@ export async function GET(request: NextRequest) {
 
       // Fetch posts from all subreddits
       for (const subreddit of product.subreddits) {
-        debug.push(`Fetching r/${subreddit}...`)
         const fetchResult = await fetchSubredditPosts(subreddit)
-        debug.push(`r/${subreddit}: success=${fetchResult.success}, posts=${fetchResult.posts.length}`)
+        debug.push(`r/${subreddit}: posts=${fetchResult.posts.length}${fetchResult.error ? ` (${fetchResult.error})` : ''}`)
         if (!fetchResult.success) {
-          debug.push(`Failed to fetch r/${subreddit}: ${fetchResult.error}`)
           continue
         }
 

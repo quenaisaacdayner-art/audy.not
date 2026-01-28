@@ -99,16 +99,22 @@ export async function fetchSubredditPosts(
       return {
         success: false,
         posts: [],
-        error: 'Invalid JSON response from Reddit',
+        error: `Invalid JSON (${text.length} chars): ${text.substring(0, 100)}`,
       }
     }
 
     // Extract posts from Reddit's listing structure
     const posts = data.data?.children?.map((child) => child.data) || []
 
+    // Debug: if no posts, show what we got
+    if (posts.length === 0) {
+      console.log(`Reddit returned 0 posts. Response: ${JSON.stringify(data).substring(0, 300)}`)
+    }
+
     return {
       success: true,
       posts,
+      error: posts.length === 0 ? `Empty: ${JSON.stringify(data).substring(0, 150)}` : undefined,
     }
   } catch (error) {
     // Network errors or JSON parsing errors
