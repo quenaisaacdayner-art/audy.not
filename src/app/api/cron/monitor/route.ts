@@ -57,11 +57,16 @@ export async function GET(request: NextRequest) {
     }
 
     stats.products = products.length
+    console.log(`Found ${products.length} products`)
 
     // 3. Process each product
     for (const product of products as ProductWithPersona[]) {
+      console.log(`Product: ${product.name}, subreddits: ${JSON.stringify(product.subreddits)}`)
       // Skip if no subreddits configured
-      if (!product.subreddits?.length) continue
+      if (!product.subreddits?.length) {
+        console.log(`Skipping ${product.name} - no subreddits`)
+        continue
+      }
 
       // Fetch persona for this product's user
       const { data: persona } = await supabase
@@ -72,7 +77,9 @@ export async function GET(request: NextRequest) {
 
       // Fetch posts from all subreddits
       for (const subreddit of product.subreddits) {
+        console.log(`Fetching r/${subreddit}...`)
         const fetchResult = await fetchSubredditPosts(subreddit)
+        console.log(`r/${subreddit}: success=${fetchResult.success}, posts=${fetchResult.posts.length}`)
         if (!fetchResult.success) {
           console.warn(`Failed to fetch r/${subreddit}:`, fetchResult.error)
           continue
