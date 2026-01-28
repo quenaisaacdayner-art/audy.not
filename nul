@@ -1,0 +1,9 @@
+npm warn exec The following package was not found and will be installed: context7@1.0.3
+- Resolving project "resolve"...
+Error fetching projects: Error: Failed to fetch projects: 404 Not Found
+    at fetchProjects (file:///C:/Users/quena/AppData/Local/npm-cache/_npx/6e6b3d68d562bc8c/node_modules/context7/index.js:65:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async resolveProjectPath (file:///C:/Users/quena/AppData/Local/npm-cache/_npx/6e6b3d68d562bc8c/node_modules/context7/index.js:92:20)
+    at async handleQuery (file:///C:/Users/quena/AppData/Local/npm-cache/_npx/6e6b3d68d562bc8c/node_modules/context7/index.js:231:20)
+    at async Object.handler (file:///C:/Users/quena/AppData/Local/npm-cache/_npx/6e6b3d68d562bc8c/node_modules/context7/index.js:432:23)
+✖ Error: Failed to fetch projects: 404 Not Found

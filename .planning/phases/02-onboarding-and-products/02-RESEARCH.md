@@ -69,9 +69,9 @@ src/
 ├── components/
 │   ├── onboarding/
 │   │   ├── onboarding-stepper.tsx # Step indicator bar
-│   │   ├── persona-step.tsx       # Step 1: Persona configuration
+│   │   ├── persona-step.tsx       # Step 1: First product setup
 │   │   ├── telegram-step.tsx      # Step 2: Telegram connection (optional)
-│   │   └── product-step.tsx       # Step 3: First product setup
+│   │   └── product-step.tsx       # Step 3:  Persona configuration
 │   └── ui/
 │       └── skeleton.tsx           # Loading skeletons for product fields
 ├── lib/
@@ -767,7 +767,7 @@ Things that couldn't be fully resolved:
 
 Per CONTEXT.md user decisions that must be reflected in plans:
 
-1. **Step order:** Persona -> Telegram -> Product (fixed)
+1. **Step order:** product -> Telegram -> person (fixed)
 2. **Stepper bar:** Show at top with current position (Step X of 3)
 3. **Telegram optional:** Can skip, connect later from settings
 4. **Persona required:** Four fields - expertise, tone, phrases to avoid, target audience

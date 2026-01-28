@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Skill(gsd:execute-phase)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(wc:*)",
+      "Bash(cat:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx @anthropic/claude-code-mcp-client context7 resolve-library-id:*)",
+      "WebFetch(domain:grammy.dev)",
+      "WebFetch(domain:core.telegram.org)",
+      "WebFetch(domain:www.launchfa.st)"
+    ]
+  }
+}
