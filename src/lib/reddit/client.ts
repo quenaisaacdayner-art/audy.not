@@ -76,6 +76,7 @@ export async function fetchSubredditPosts(
       return {
         success: true,
         posts: [],
+        error: `HTTP ${response.status} (private/banned)`,
       }
     }
 
@@ -105,12 +106,12 @@ export async function fetchSubredditPosts(
 
     // Extract posts from Reddit's listing structure
     const posts = data.data?.children?.map((child) => child.data) || []
-    const rawResponse = JSON.stringify(data).substring(0, 200)
+    const rawResponse = JSON.stringify(data).substring(0, 150)
 
     return {
       success: true,
       posts,
-      error: `raw:${rawResponse}`,
+      error: `HTTP ${response.status}, children=${data.data?.children?.length || 0}, raw:${rawResponse}`,
     }
   } catch (error) {
     // Network errors or JSON parsing errors
