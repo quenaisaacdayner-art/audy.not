@@ -105,16 +105,12 @@ export async function fetchSubredditPosts(
 
     // Extract posts from Reddit's listing structure
     const posts = data.data?.children?.map((child) => child.data) || []
-
-    // Debug: if no posts, show what we got
-    if (posts.length === 0) {
-      console.log(`Reddit returned 0 posts. Response: ${JSON.stringify(data).substring(0, 300)}`)
-    }
+    const rawResponse = JSON.stringify(data).substring(0, 200)
 
     return {
       success: true,
       posts,
-      error: posts.length === 0 ? `Empty: ${JSON.stringify(data).substring(0, 150)}` : undefined,
+      error: `raw:${rawResponse}`,
     }
   } catch (error) {
     // Network errors or JSON parsing errors
