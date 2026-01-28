@@ -76,11 +76,14 @@ export async function GET(request: NextRequest) {
         .eq('user_id', product.user_id)
         .single()
 
-      // Fetch posts from all subreddits
+      // Fetch posts from all subreddits - only test first one to reduce output
+      const testSubreddit = product.subreddits[0]
+      const fetchResult = await fetchSubredditPosts(testSubreddit)
+      debug.push(`r/${testSubreddit}: posts=${fetchResult.posts.length}, error=${fetchResult.error || 'none'}`)
+
       for (const subreddit of product.subreddits) {
-        const fetchResult = await fetchSubredditPosts(subreddit)
-        debug.push(`r/${subreddit}: posts=${fetchResult.posts.length}${fetchResult.error ? ` (${fetchResult.error})` : ''}`)
-        if (!fetchResult.success) {
+        const result = await fetchSubredditPosts(subreddit)
+        if (!result.success) {
           continue
         }
 
