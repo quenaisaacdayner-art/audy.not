@@ -33,7 +33,6 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceRoleClient()
   const stats = { products: 0, posts_found: 0, mentions_created: 0 }
-  const debug: string[] = []
 
   try {
     // 2. Get all products
@@ -58,14 +57,11 @@ export async function GET(request: NextRequest) {
     }
 
     stats.products = products.length
-    debug.push(`Found ${products.length} products`)
 
     // 3. Process each product
     for (const product of products as ProductWithPersona[]) {
-      debug.push(`Product: ${product.name}, subreddits: ${JSON.stringify(product.subreddits)}`)
       // Skip if no subreddits configured
       if (!product.subreddits?.length) {
-        debug.push(`Skipping ${product.name} - no subreddits`)
         continue
       }
 
@@ -76,11 +72,6 @@ export async function GET(request: NextRequest) {
         .eq('user_id', product.user_id)
         .single()
 
-      // Fetch posts from all subreddits - only test first one to reduce output
-      const testSubreddit = product.subreddits[0]
-      const fetchResult = await fetchSubredditPosts(testSubreddit)
-      debug.push(`r/${testSubreddit}: posts=${fetchResult.posts.length}, errorType=${typeof fetchResult.error}, error=${String(fetchResult.error)}`)
-
       for (const subreddit of product.subreddits) {
         const result = await fetchSubredditPosts(subreddit)
         if (!result.success) {
@@ -89,8 +80,8 @@ export async function GET(request: NextRequest) {
 
         // Filter by keywords
         const relevant = product.keywords?.length
-          ? filterPostsByKeywords(fetchResult.posts, product.keywords)
-          : fetchResult.posts
+          ? filterPostsByKeywords(result.posts, product.keywords)
+          : result.posts
 
         stats.posts_found += relevant.length
 
@@ -194,7 +185,7 @@ export async function GET(request: NextRequest) {
       last_run_stats: stats,
     })
 
-    return Response.json({ success: true, stats, debug })
+    return Response.json({ success: true, stats })
   } catch (error) {
     console.error('Monitoring error:', error)
     return Response.json(

@@ -1,7 +1,9 @@
 /**
- * Reddit JSON API client for public subreddit monitoring.
- * Uses Reddit's public JSON API (no OAuth required for read-only access).
+ * Reddit OAuth API client for subreddit monitoring.
+ * Uses Reddit's OAuth API (required for server-side access from cloud IPs).
  */
+
+import { getAccessToken } from './oauth'
 
 export interface RedditPost {
   id: string           // Reddit's post ID (e.g., "1abc23d")
@@ -38,7 +40,7 @@ export interface FetchResult {
 const USER_AGENT = 'AudyBot/1.0 (Reddit Monitoring)'
 
 /**
- * Fetches new posts from a subreddit using Reddit's public JSON API.
+ * Fetches new posts from a subreddit using Reddit's OAuth API.
  *
  * @param subreddit - Subreddit name without r/ prefix (e.g., "SaaS")
  * @param limit - Maximum number of posts to fetch (default: 25, max: 100)
@@ -51,12 +53,24 @@ export async function fetchSubredditPosts(
   subreddit: string,
   limit: number = 25
 ): Promise<FetchResult> {
-  const url = `https://www.reddit.com/r/${subreddit}/new.json?limit=${limit}`
+  // Get OAuth token first
+  const accessToken = await getAccessToken()
+  if (!accessToken) {
+    return {
+      success: false,
+      posts: [],
+      error: 'Failed to get Reddit OAuth token',
+    }
+  }
+
+  // Use OAuth endpoint (oauth.reddit.com instead of www.reddit.com)
+  const url = `https://oauth.reddit.com/r/${subreddit}/new.json?limit=${limit}`
 
   try {
     const response = await fetch(url, {
       headers: {
         'User-Agent': USER_AGENT,
+        'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/json',
       },
       next: { revalidate: 0 }, // Disable Next.js caching
@@ -106,12 +120,10 @@ export async function fetchSubredditPosts(
 
     // Extract posts from Reddit's listing structure
     const posts = data.data?.children?.map((child) => child.data) || []
-    const rawResponse = JSON.stringify(data).substring(0, 150)
 
     return {
       success: true,
       posts,
-      error: `HTTP ${response.status}, children=${data.data?.children?.length || 0}, raw:${rawResponse}`,
     }
   } catch (error) {
     // Network errors or JSON parsing errors
