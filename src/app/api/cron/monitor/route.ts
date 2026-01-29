@@ -2,7 +2,6 @@ import type { NextRequest } from 'next/server'
 import { createServiceRoleClient } from '@/lib/supabase/service-role'
 import { fetchSubredditPosts, filterPostsByKeywords } from '@/lib/reddit/client'
 import { classifyPostIntent, generateDraftReply } from '@/lib/openai/client'
-import { createMention, checkMentionExists } from '@/actions/mentions'
 import { sendMentionNotification } from '@/lib/telegram/notifications'
 import type { Mention } from '@/types/database'
 
@@ -87,9 +86,14 @@ export async function GET(request: NextRequest) {
 
         // Process each relevant post
         for (const post of relevant) {
-          // Deduplication check
-          const exists = await checkMentionExists(product.id, post.id)
-          if (exists) continue
+          // Deduplication check (use service role to bypass RLS)
+          const { data: existingMention } = await supabase
+            .from('mentions')
+            .select('id')
+            .eq('product_id', product.id)
+            .eq('reddit_post_id', post.id)
+            .maybeSingle()
+          if (existingMention) continue
 
           // Classify intent
           const classification = await classifyPostIntent(
@@ -130,25 +134,35 @@ export async function GET(request: NextRequest) {
             typedPersona
           )
 
-          // Create mention (even if reply generation failed - draft_reply can be null)
-          const mentionResult = await createMention({
-            product_id: product.id,
-            user_id: product.user_id,
-            reddit_post_id: post.id,
-            reddit_permalink: `https://reddit.com${post.permalink}`,
-            reddit_title: post.title,
-            reddit_content: post.selftext || null,
-            reddit_author: post.author,
-            reddit_subreddit: post.subreddit,
-            reddit_created_at: new Date(post.created_utc * 1000).toISOString(),
-            intent: classification.data!.intent as
-              | 'pain_point'
-              | 'recommendation_request',
-            confidence: classification.data!.confidence,
-            draft_reply: reply.data?.reply || null,
-          })
+          // Create mention using service role client (bypasses RLS for cron)
+          const { data: newMention, error: mentionError } = await supabase
+            .from('mentions')
+            .insert({
+              product_id: product.id,
+              user_id: product.user_id,
+              reddit_post_id: post.id,
+              reddit_permalink: `https://reddit.com${post.permalink}`,
+              reddit_title: post.title,
+              reddit_content: post.selftext || null,
+              reddit_author: post.author,
+              reddit_subreddit: post.subreddit,
+              reddit_created_at: new Date(post.created_utc * 1000).toISOString(),
+              intent: classification.data!.intent as
+                | 'pain_point'
+                | 'recommendation_request',
+              confidence: classification.data!.confidence,
+              draft_reply: reply.data?.reply || null,
+              status: 'pending',
+            })
+            .select('id')
+            .single()
 
-          if (mentionResult.success && mentionResult.id) {
+          if (mentionError) {
+            console.error('Mention create error:', mentionError)
+            continue
+          }
+
+          if (newMention) {
             stats.mentions_created++
 
             // Fetch user's telegram connection
@@ -163,7 +177,7 @@ export async function GET(request: NextRequest) {
               const { data: fullMention } = await supabase
                 .from('mentions')
                 .select('*')
-                .eq('id', mentionResult.id)
+                .eq('id', newMention.id)
                 .single<Mention>()
 
               if (fullMention) {
