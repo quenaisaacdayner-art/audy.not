@@ -1,9 +1,10 @@
 /**
- * Reddit OAuth API client for subreddit monitoring.
- * Uses Reddit's OAuth API (required for server-side access from cloud IPs).
+ * Reddit client for subreddit monitoring.
+ *
+ * Strategy:
+ * 1. Try Reddit's public JSON API (free, no auth required)
+ * 2. If blocked (403/429), fall back to ScrapeCreators API (paid)
  */
-
-import { getAccessToken } from './oauth'
 
 export interface RedditPost {
   id: string           // Reddit's post ID (e.g., "1abc23d")
@@ -31,109 +32,163 @@ interface RedditListingResponse {
   }
 }
 
+interface ScrapeCreatorsResponse {
+  posts: RedditPost[]
+  after: string | null
+}
+
 export interface FetchResult {
   success: boolean
   posts: RedditPost[]
   error?: string
+  source?: 'public' | 'scrapecreators'
 }
 
 const USER_AGENT = 'AudyBot/1.0 (Reddit Monitoring)'
 
 /**
- * Fetches new posts from a subreddit using Reddit's OAuth API.
- *
- * @param subreddit - Subreddit name without r/ prefix (e.g., "SaaS")
- * @param limit - Maximum number of posts to fetch (default: 25, max: 100)
- * @returns FetchResult with posts array or error message
- *
- * Note: Private/banned subreddits return empty posts array (not error)
- * to allow silent skipping in monitoring loops.
+ * Fetch posts from Reddit's public JSON API (no auth required).
+ * Returns null on 403/429 to signal that fallback should be tried.
  */
-export async function fetchSubredditPosts(
+async function fetchFromPublicApi(
   subreddit: string,
-  limit: number = 25
-): Promise<FetchResult> {
-  // Get OAuth token first
-  const accessToken = await getAccessToken()
-  if (!accessToken) {
-    return {
-      success: false,
-      posts: [],
-      error: 'Failed to get Reddit OAuth token',
-    }
-  }
-
-  // Use OAuth endpoint (oauth.reddit.com instead of www.reddit.com)
-  const url = `https://oauth.reddit.com/r/${subreddit}/new.json?limit=${limit}`
+  limit: number
+): Promise<FetchResult | null> {
+  const url = `https://www.reddit.com/r/${subreddit}/new.json?limit=${limit}`
 
   try {
     const response = await fetch(url, {
       headers: {
         'User-Agent': USER_AGENT,
-        'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/json',
       },
-      next: { revalidate: 0 }, // Disable Next.js caching
+      cache: 'no-store',
     })
 
-    // Handle rate limiting
-    if (response.status === 429) {
-      return {
-        success: false,
-        posts: [],
-        error: 'Rate limited by Reddit',
-      }
+    // Blocked or rate limited — signal fallback
+    if (response.status === 403 || response.status === 429) {
+      return null
     }
 
-    // Private/banned/nonexistent subreddits - return empty (silent skip)
-    if (response.status === 403 || response.status === 404) {
-      return {
-        success: true,
-        posts: [],
-        error: `HTTP ${response.status} (private/banned)`,
-      }
+    // Private/banned/nonexistent subreddits — silent skip
+    if (response.status === 404) {
+      return { success: true, posts: [], source: 'public' }
     }
 
-    // Other HTTP errors
     if (!response.ok) {
-      return {
-        success: false,
-        posts: [],
-        error: `HTTP ${response.status}`,
-      }
+      return { success: false, posts: [], error: `HTTP ${response.status}`, source: 'public' }
     }
 
     const text = await response.text()
 
-    // Debug: check if we got valid JSON
     let data: RedditListingResponse
     try {
       data = JSON.parse(text)
     } catch {
       console.error('Reddit response not JSON:', text.substring(0, 500))
-      return {
-        success: false,
-        posts: [],
-        error: `Invalid JSON (${text.length} chars): ${text.substring(0, 100)}`,
-      }
+      return null // Try fallback on invalid response
     }
 
-    // Extract posts from Reddit's listing structure
     const posts = data.data?.children?.map((child) => child.data) || []
-
-    return {
-      success: true,
-      posts,
-    }
+    return { success: true, posts, source: 'public' }
   } catch (error) {
-    // Network errors or JSON parsing errors
-    console.error('Reddit fetch error:', error)
+    console.error('Reddit public API error:', error)
+    return null // Network error — try fallback
+  }
+}
+
+/**
+ * Fetch posts from ScrapeCreators API (paid fallback).
+ * Requires SCRAPECREATORS_API_KEY environment variable.
+ */
+async function fetchFromScrapeCreators(
+  subreddit: string,
+): Promise<FetchResult> {
+  const apiKey = process.env.SCRAPECREATORS_API_KEY
+  if (!apiKey) {
     return {
       success: false,
       posts: [],
-      error: error instanceof Error ? error.message : 'Failed to fetch subreddit',
+      error: 'SCRAPECREATORS_API_KEY not configured',
+      source: 'scrapecreators',
     }
   }
+
+  const url = `https://api.scrapecreators.com/v1/reddit/subreddit?subreddit=${encodeURIComponent(subreddit)}&sort=new&trim=true`
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'x-api-key': apiKey,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    })
+
+    if (!response.ok) {
+      const text = await response.text()
+      console.error('ScrapeCreators error:', response.status, text.substring(0, 200))
+      return {
+        success: false,
+        posts: [],
+        error: `ScrapeCreators HTTP ${response.status}`,
+        source: 'scrapecreators',
+      }
+    }
+
+    const data: ScrapeCreatorsResponse = await response.json()
+    const posts: RedditPost[] = (data.posts || []).map((post) => ({
+      id: post.id || '',
+      title: post.title || '',
+      selftext: post.selftext || '',
+      author: post.author || '',
+      subreddit: post.subreddit || subreddit,
+      permalink: post.permalink || '',
+      created_utc: post.created_utc || 0,
+      score: post.score || 0,
+      num_comments: post.num_comments || 0,
+      url: post.url || '',
+      is_self: post.is_self ?? true,
+    }))
+
+    return { success: true, posts, source: 'scrapecreators' }
+  } catch (error) {
+    console.error('ScrapeCreators fetch error:', error)
+    return {
+      success: false,
+      posts: [],
+      error: error instanceof Error ? error.message : 'ScrapeCreators request failed',
+      source: 'scrapecreators',
+    }
+  }
+}
+
+/**
+ * Fetches new posts from a subreddit.
+ *
+ * Uses a layered approach:
+ * 1. Try Reddit's public JSON API (free, no auth)
+ * 2. If blocked (403/429), fall back to ScrapeCreators (paid)
+ *
+ * @param subreddit - Subreddit name without r/ prefix (e.g., "SaaS")
+ * @param limit - Maximum number of posts to fetch (default: 25, max: 100)
+ * @returns FetchResult with posts array or error message
+ */
+export async function fetchSubredditPosts(
+  subreddit: string,
+  limit: number = 25
+): Promise<FetchResult> {
+  // Try public API first
+  const publicResult = await fetchFromPublicApi(subreddit, limit)
+
+  // If public API returned a result (even empty), use it
+  if (publicResult !== null) {
+    return publicResult
+  }
+
+  // Public API blocked (403/429) or errored — try fallback
+  console.warn(`Reddit public API blocked for r/${subreddit}, trying ScrapeCreators fallback`)
+  return fetchFromScrapeCreators(subreddit)
 }
 
 /**
