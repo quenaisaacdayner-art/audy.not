@@ -32,11 +32,27 @@ export const bot = token ? new Bot(token) : null
 if (bot && supabase) {
   // Handle /start command with deep link parameter
   bot.command('start', async (ctx) => {
-    const payload = ctx.match // Contains the connection token from deep link
+    let payload = ctx.match // Contains the connection token from deep link
 
+    // If no payload (e.g. user opened bot via QR code and Telegram didn't pass the token),
+    // try to find the most recent pending connection token
     if (!payload) {
-      await ctx.reply('Please use the connection link from the Audy.not app.')
-      return
+      const { data: pendingToken } = await supabase
+        .from('telegram_connection_tokens')
+        .select('*')
+        .gt('expires_at', new Date().toISOString())
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single<TelegramConnectionToken>()
+
+      if (pendingToken) {
+        payload = pendingToken.token
+      } else {
+        await ctx.reply(
+          'Welcome to Audy.not!\n\nTo connect your account, open the Audy.not app and go to the Telegram connection step. Then scan the QR code or click the link provided.'
+        )
+        return
+      }
     }
 
     try {
